@@ -3,6 +3,7 @@ import Image from "next/image";
 import PropertyCard from "./(home-owners)/list-property/PropertyCard";
 import { usePropertyList } from "../hooks/useProperties";
 import SnappadLoader from "@/components/SnappadLoader";
+import { Toaster } from "react-hot-toast";
 
 export default function Home() {
   const { properties, loading, error } = usePropertyList();
@@ -36,6 +37,7 @@ export default function Home() {
               )}
         </div>
       </main>
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 }

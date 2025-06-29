@@ -10,6 +10,7 @@ import { useBooking } from "@/hooks/useBooking";
 // Assuming GuestDropdown and DateInput are correctly defined and imported
 import GuestDropdown from "./GuestDropdown";
 import DateInput from "./DateInput";
+import toast from "react-hot-toast";
 
 export interface ReserveModalProps {
   propertyId: string;
@@ -110,10 +111,10 @@ function ReserveModal({
         numberOfGuests,
       });
 
-      alert("Booking successful! Confirmation ID: " + bookingData._id);
+      toast.success("Booking successful!");
       router.push(`/bookings/${bookingData._id}`); // Navigate to confirmation page
 
-      
+
     } catch (err) {
       alert(bookingError || "Booking failed. Please try again.");
     }
