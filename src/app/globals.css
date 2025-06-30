@@ -2,16 +2,16 @@
 
 @theme {
   /* --color-primary: #ff255b; */
-  --color-primary:  #40196c;
-  --color-tertiary:  #7c78a7;
+  --color-primary:  #4090ff;
+  --color-tertiary:  #ff7598;
   --color-secondary: #f9e9ec;
-  --color-accent: #8f8514;
+  /* --color-primary: #ff7598; */
   --color-neutral-dark: #363946;
   --color-black: #111111;
 }
 
 button{
-  cursor: pointer;
+  cursor: pointer; 
 }
 
 button:focus:active, 

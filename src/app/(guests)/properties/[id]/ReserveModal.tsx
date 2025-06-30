@@ -7,10 +7,11 @@ import { IoInformationCircleOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation"; // Don't forget to import useRouter!
 
 import { useBooking } from "@/hooks/useBooking";
+import type { BookingCreateInput } from '@/types/booking';
+
 // Assuming GuestDropdown and DateInput are correctly defined and imported
 import GuestDropdown from "./GuestDropdown";
 import DateInput from "./DateInput";
-import toast from "react-hot-toast";
 
 export interface ReserveModalProps {
   propertyId: string;
@@ -31,20 +32,18 @@ function ReserveModal({
   numberOfGuests,
   setNumberOfGuests,
 }: ReserveModalProps) {
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter();
 
-  // Use the custom booking hook
   const {
     isAvailable,
-    availabilityLoading,
-    availabilityError,
-    bookingLoading,
-    bookingError,
-    bookingSuccess,
-    // Removed setIsAvailable from here
+    setIsAvailable,
     checkAvailability,
     submitBooking,
+    cancelBooking,
     resetBookingState,
+    availability,
+    booking,
+    cancellation,
   } = useBooking();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -54,9 +53,7 @@ function ReserveModal({
 
   // Effect to recalculate nights, total price, and trigger availability check
   useEffect(() => {
-    // Always reset booking success/error and availability status when dates change
     resetBookingState();
-
     if (selectedDates.from && selectedDates.to) {
       const diffTime = Math.abs(
         selectedDates.to.getTime() - selectedDates.from.getTime()
@@ -64,12 +61,10 @@ function ReserveModal({
       const calculatedNights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       setNights(calculatedNights);
       setTotalBookingPrice(calculatedNights * propertyPrice);
-
       checkAvailability(propertyId, selectedDates);
     } else {
       setNights(0);
       setTotalBookingPrice(0);
-      // resetBookingState() above already handles setting isAvailable to null
     }
   }, [
     selectedDates,
@@ -77,7 +72,6 @@ function ReserveModal({
     propertyId,
     checkAvailability,
     resetBookingState,
-    // setIsAvailable removed from dependencies
   ]);
 
   // Handle guest count change from the dropdown
@@ -106,17 +100,14 @@ function ReserveModal({
     try {
       const bookingData = await submitBooking({
         propertyId,
-        checkInDate: selectedDates.from,
-        checkOutDate: selectedDates.to,
+        checkInDate: selectedDates.from!,
+        checkOutDate: selectedDates.to!,
         numberOfGuests,
-      });
+      } as BookingCreateInput);
 
-      toast.success("Booking successful!");
       router.push(`/bookings/${bookingData._id}`); // Navigate to confirmation page
-
-
     } catch (err) {
-      alert(bookingError || "Booking failed. Please try again.");
+      alert(booking.error || "Booking failed. Please try again.");
     }
   };
 
@@ -124,8 +115,8 @@ function ReserveModal({
     !selectedDates.from ||
     !selectedDates.to ||
     !isAvailable ||
-    availabilityLoading ||
-    bookingLoading ||
+    availability.loading ||
+    booking.loading ||
     numberOfGuests < 1 ||
     numberOfGuests > propertyCapacity;
 
@@ -142,7 +133,9 @@ function ReserveModal({
             <DateInput
               label="CHECK-IN"
               value={selectedDates.from}
-              onChange={(from) => setSelectedDates((dates) => ({ ...dates, from }))}
+              onChange={(from) =>
+                setSelectedDates((dates) => ({ ...dates, from }))
+              }
             />
             <DateInput
               label="CHECK-OUT"
@@ -157,34 +150,37 @@ function ReserveModal({
           />
         </div>
         {/* Availability Status Display */}
-        {availabilityLoading && (
+        {availability.loading && (
           <p className="text-sm text-primary-500 flex items-center gap-1 mt-2 text-black">
             <IoInformationCircleOutline /> Checking availability...
           </p>
         )}
-        {availabilityError && (
+        {availability.error && (
           <p className="text-sm text-red-500 flex items-start gap-1 mt-2">
             <IoInformationCircleOutline className="mt-1" />
-            <span>{availabilityError}</span>
+            <span>{availability.error}</span>
           </p>
         )}
-        {isAvailable !== null && !availabilityLoading && !availabilityError && (
-          <p
-            className={`text-sm flex items-center gap-1 mt-2 ${
-              isAvailable ? "text-green-600" : "text-red-500"
-            }`}
-          >
-            <IoInformationCircleOutline />
-            {isAvailable
-              ? "Property is available!"
-              : "Property is unavailable for these dates."}
-          </p>
-        )}
+        {isAvailable !== null &&
+          !availability.loading &&
+          !availability.error && (
+            <p
+              className={`text-sm flex items-center gap-1 mt-2 ${
+                isAvailable ? "text-green-600" : "text-red-500"
+              }`}
+            >
+              <IoInformationCircleOutline />
+              {isAvailable
+                ? "Property is available!"
+                : "Property is unavailable for these dates."}
+            </p>
+          )}
         {/* Booking Summary */}
         {nights > 0 && (
           <div className="flex justify-between items-center text-base font-semibold border-t border-neutral-200 pt-4 mt-4 bg-white text-gray-800">
             <span>
-              <span className="text-primary">${propertyPrice}</span> x <span className="text-black">{nights}</span> nights
+              <span className="text-primary">${propertyPrice}</span> x{" "}
+              <span className="text-black">{nights}</span> nights
             </span>
             <span className="text-black">${totalBookingPrice}</span>
           </div>
@@ -200,20 +196,31 @@ function ReserveModal({
                 : "bg-primary hover:bg-tertiary"
             }`}
         >
-          {bookingLoading ? "Reserving..." : "Reserve"}
+          {booking.loading ? "Reserving..." : "Reserve"}
         </button>
         <p className="text-neutral-500 text-sm mt-3 text-center">
           You won't be charged yet
         </p>
         {/* Booking Status Feedback */}
-        {bookingError && (
+        {booking.error && (
           <p className="text-sm text-red-500 mt-2 flex items-center gap-1">
-            <IoInformationCircleOutline /> {bookingError}
+            <IoInformationCircleOutline /> {booking.error}
           </p>
         )}
-        {bookingSuccess && (
+        {booking.success && (
           <p className="text-sm text-green-600 mt-2 flex items-center gap-1">
             <IoInformationCircleOutline /> Booking successful!
+          </p>
+        )}
+        {/* Cancellation Status Feedback (optional, if you add a cancel button) */}
+        {cancellation.error && (
+          <p className="text-sm text-red-500 mt-2 flex items-center gap-1">
+            <IoInformationCircleOutline /> {cancellation.error}
+          </p>
+        )}
+        {cancellation.success && (
+          <p className="text-sm text-green-600 mt-2 flex items-center gap-1">
+            <IoInformationCircleOutline /> Booking cancelled!
           </p>
         )}
       </div>

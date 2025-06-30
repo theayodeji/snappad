@@ -1,9 +1,8 @@
 "use client";
 import Image from "next/image";
-import PropertyCard from "./(home-owners)/list-property/PropertyCard";
+import PropertyCard from "./(guests)/properties/PropertyCard";
 import { usePropertyList } from "../hooks/useProperties";
 import SnappadLoader from "@/components/SnappadLoader";
-import { Toaster } from "react-hot-toast";
 
 export default function Home() {
   const { properties, loading, error } = usePropertyList();
@@ -16,7 +15,7 @@ export default function Home() {
             <SnappadLoader />
           </div>
         )}
-        {error && <div className="text-accent">{error}</div>}
+        {error && <div className="text-primary">{error}</div>}
         <div className="flex flex-wrap items-stretch justify-start gap-4 w-full mx-auto">
           {properties.length > 0
             ? properties.map((property: any) => (
@@ -37,7 +36,6 @@ export default function Home() {
               )}
         </div>
       </main>
-      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 }

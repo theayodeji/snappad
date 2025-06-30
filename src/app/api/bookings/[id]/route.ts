@@ -38,3 +38,36 @@ export async function GET(
     );
   }
 }
+
+// DELETE /api/bookings/[id]
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  await dbConnect();
+
+  const { id } = params;
+
+  try {
+    const booking = await Booking.findByIdAndDelete(id);
+
+    if (!booking) {
+      return NextResponse.json(
+        { success: false, message: 'Booking not found.' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, message: 'Booking cancelled successfully.' },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error('Error cancelling booking:', error);
+    return NextResponse.json(
+      { success: false, message: 'Server error.', error: error.message },
+      { status: 500 }
+    );
+  }
+}

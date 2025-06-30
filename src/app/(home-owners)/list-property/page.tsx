@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Open_Sans } from 'next/font/google';
-import TextInput from './TextInput';
+import TextInput from '../../(guests)/properties/TextInput';
 
 const openSans = Open_Sans({ subsets: ['latin'] });
 
@@ -146,7 +146,7 @@ export default function ListPropertyPage() {
 
         <button
           type="submit"
-          className="w-full bg-accent hover:bg-accent/90 text-white p-4 rounded-3xl shadow-sm cursor-pointer transition duration-500 font-semibold text-lg"
+          className="w-full bg-primary hover:bg-primary/90 text-white p-4 rounded-3xl shadow-sm cursor-pointer transition duration-500 font-semibold text-lg"
         >
           List Property
         </button>

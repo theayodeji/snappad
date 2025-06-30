@@ -31,9 +31,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
 }) => (
   <Link
     href={`/properties/${id}`}
-    className="flex flex-col w-full md:w-[33%] lg:w-[30%] h:auto md:h-[430px] rounded-lg border-1 hover:scale-[1.02] border-gray-200 dark:border-none bg-white dark:bg-dark relative overflow-hidden transition-scale duration-300 ease-out"
+    className="flex flex-col w-full md:w-[33%] lg:w-[30%] h:auto md:h-[450px] rounded-lg border-1 hover:scale-[1.02] border-gray-200 dark:border-none bg-white dark:bg-dark relative overflow-hidden transition-scale duration-300 ease-out"
   >
-    <span className="absolute text-[10px] md:text-xs font-semibold bg-accent text-white uppercase top-4 left-4 md:right-4 md:left-auto px-3 py-1.5 rounded-full">
+    <span className="absolute text-[10px] md:text-xs font-semibold bg-primary text-white uppercase top-4 left-4 md:right-4 md:left-auto px-3 py-1.5 rounded-full">
       {badge}
     </span>
     <div className="flex flex-row md:flex-col items-stretch md:items-center h-[180px] md:h-auto">

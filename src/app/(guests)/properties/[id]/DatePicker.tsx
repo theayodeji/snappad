@@ -24,7 +24,7 @@ const DatePicker = ({
           caption: "text-lg font-bold text-black",
           day: "rounded-full border-none",
           today: "text-[rimary",
-          selected: "border-2 border-accent text-black",
+          selected: "border-2 border-primary text-black",
           range_start: "bg-primary text-white",
           range_end: "bg-primary text-white",
           range_middle: "text-white bg-tertiary",
