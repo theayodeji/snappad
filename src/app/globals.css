@@ -1,11 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Sora:wght@100..800&display=swap');
 @import "tailwindcss";
+
+body{
+  font-family: "Sora", sans-serif;
+}
 
 @theme {
   /* --color-primary: #ff255b; */
   --color-primary:  #4090ff;
   --color-tertiary:  #ff7598;
   --color-secondary: #f9e9ec;
-  /* --color-primary: #ff7598; */
   --color-neutral-dark: #363946;
   --color-black: #111111;
 }

@@ -1,7 +1,8 @@
-"use client"
+"use client";
 import React from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
+import ButtonLoader from "../ui/ButtonLoader";
 
 interface SignInFormProps {
   email: string;
@@ -14,10 +15,11 @@ interface SignInFormProps {
   setRememberMe: (v: boolean) => void;
   onSignIn: (e: React.FormEvent<HTMLFormElement>) => void;
   onGoogleSignIn?: () => void;
+  loading?: boolean;
   onFacebookSignIn?: () => void;
 }
 
-const SignInForm: React.FC<SignInFormProps> = ({
+function SignInForm({
   email,
   setEmail,
   password,
@@ -29,7 +31,9 @@ const SignInForm: React.FC<SignInFormProps> = ({
   onSignIn,
   onGoogleSignIn,
   onFacebookSignIn,
-}) => {
+  loading,
+}: SignInFormProps) {
+  
   return (
     <form onSubmit={onSignIn} className="space-y-4">
       <div>
@@ -91,18 +95,20 @@ const SignInForm: React.FC<SignInFormProps> = ({
             Remember me
           </label>
         </div>
-        <a
-          href="#"
-          className="font-medium text-primary dark:text-tertiary hover:underline"
-        >
+        <a href="#" className="font-medium text-primary hover:underline">
           Forgot Password?
         </a>
       </div>
       <button
         type="submit"
-        className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-tertiary dark:hover:bg-tertiary transition duration-200 shadow-md"
+        disabled={loading}
+        className={`w-full text-white py-3 rounded-lg font-semibold  transition duration-200 shadow-md ${
+          loading
+            ? "bg-gray-500 dark:bg-gray-500 cursor-not-allowed hover:bg-gray-500 dark:hover:bg-gray-500"
+            : "bg-primary dark:bg-primary hover:bg-primary/80"
+        }`}
       >
-        Sign in
+        {loading ? <ButtonLoader /> : "Sign in"}
       </button>
       <div className="flex items-center my-6">
         <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
@@ -115,20 +121,20 @@ const SignInForm: React.FC<SignInFormProps> = ({
         <button
           type="button"
           onClick={onGoogleSignIn}
-          className="w-full flex items-center justify-center py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-text-base dark:text-gray-300 font-semibold hover:bg-neutral-200 dark:hover:bg-black transition duration-200 shadow-sm"
+          className="w-full flex items-center justify-center py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-text-base dark:text-gray-300 font-semibold hover:bg-neutral-200 dark:hover:bg-neutral-600 transition duration-200 shadow-sm"
         >
           <FaGoogle className="mr-3 text-lg" /> Continue with Google
         </button>
         <button
           type="button"
           onClick={onFacebookSignIn}
-          className="w-full flex items-center justify-center py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-text-base dark:text-gray-300 font-semibold hover:bg-neutral-200 dark:hover:bg-black transition duration-200 shadow-sm"
+          className="w-full flex items-center justify-center py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-text-base dark:text-gray-300 font-semibold hover:bg-neutral-200 dark:hover:bg-neutral-600 transition duration-200 shadow-sm"
         >
           <FaFacebookF className="mr-3 text-lg" /> Continue with Facebook
         </button>
       </div>
     </form>
   );
-};
+}
 
 export default SignInForm;

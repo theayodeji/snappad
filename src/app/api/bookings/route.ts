@@ -16,14 +16,21 @@ export async function POST(request: NextRequest) {
       checkInDate: checkInDateStr,
       checkOutDate: checkOutDateStr,
       numberOfGuests,
-      guestMessage, // Optional message from guest
-      // In a real app, userId would come from session/auth
+      guestMessage, 
+      guestId
     } = await request.json();
 
     // --- 1. Basic Input Validation ---
     if (!propertyId || !checkInDateStr || !checkOutDateStr || !numberOfGuests) {
       return NextResponse.json(
         { success: false, message: 'Missing required booking details.' },
+        { status: 400 }
+      );
+    }
+
+    if(!guestId) {
+      return NextResponse.json(
+        { success: false, message: 'Guest ID is required.' },
         { status: 400 }
       );
     }
@@ -112,7 +119,7 @@ export async function POST(request: NextRequest) {
       status: 'pending', // Default to pending. Payment integration would change this to 'confirmed'.
       paymentStatus: 'pending', // Default payment status
       guestMessage: guestMessage,
-      // In a real app, you would add userId here from authentication
+      guestId: guestId,
     });
 
     return NextResponse.json({

@@ -42,18 +42,18 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
         alt={title}
         className="w-1/2 h-full md:h-[160px] md:w-full object-cover flex-shrink-0 "
       />
-      <div className="flex flex-col flex-1 justify-center md:justify-between p-4 h-full w-full">
+      <div className="flex flex-col flex-1 justify-center md:justify-between p-4 h-full w-full gap-1">
         <div className="text-base md:text-2xl font-semibold text-primary">
           ${price}
           <span className="text-sm text-neutral-dark">/Night</span>
         </div>
-        <p className="text-md md:text-2xl font-semibold text-black dark:text-black mb-1">
+        <p className="text-md md:text-2xl font-semibold text-black dark:text-black mb-1 leading-[1rem] md:leading-normal">
           {title}
         </p>
-        <div className="text-sm text-neutral-dark mb-2 line-clamp-2">
+        <div className="text-xs md:text-sm text-neutral-dark mb-2 line-clamp-2">
           {description.length > 60 ? `${description.slice(0, 60)}...` : description}
         </div>
-          <Rating value={4} className="py-2" />
+          <Rating value={4} />
       </div>
     </div>
         <div className="md:border-t border-neutral-200 md:p-2 mt-auto">

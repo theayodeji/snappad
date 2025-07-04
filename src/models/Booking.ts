@@ -5,6 +5,7 @@ import Property from './Property'; // Import the Property model
 
 export interface IBooking extends Document {
   property: mongoose.Types.ObjectId;
+  guestId: mongoose.Types.ObjectId; // Optional field for guest ID
   checkInDate: Date;
   checkOutDate: Date;
   numberOfGuests: number;
@@ -22,6 +23,11 @@ const BookingSchema: Schema<IBooking> = new mongoose.Schema<IBooking>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Property',
       required: true,
+    },
+    guestId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User', // Assuming you have a User model
+      required: true, // Optional field for guest ID
     },
     checkInDate: {
       type: Date,

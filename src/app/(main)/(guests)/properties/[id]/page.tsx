@@ -2,7 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { fetchPropertyById } from "../../../../lib/fetchPropertyById";
+import { fetchPropertyById } from "../../../../../lib/fetchPropertyById";
 import SnappadLoader from "@/components/SnappadLoader";
 import PropertyHeader from "./PropertyHeader";
 import PropertyImage from "./PropertyImage";
@@ -16,13 +16,6 @@ import DatePicker from "./DatePicker";
 import { DateRange } from "react-day-picker";
 
 const DEFAULT_LOCATION = "Lekki, Banana Island, Lagos, Nigeria";
-const DEFAULT_FEATURES = [
-  "Private Pool",
-  "Ocean View",
-  "Free Wi-Fi",
-  "Fully Equipped Kitchen",
-  "Air Conditioning",
-];
 
 const PropertyDetailsPage = () => {
   const params = useParams();
@@ -44,7 +37,6 @@ const PropertyDetailsPage = () => {
     fetchPropertyById(id)
       .then((data: any) => {
         setProperty(data)
-        console.log("Fetched property:", data);
     })
       .catch((err: any) => setError(err.message))
       .finally(() => setLoading(false));

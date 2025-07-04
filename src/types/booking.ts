@@ -33,6 +33,7 @@ export interface BookingDetails {
   totalPrice: number;
   guestMessage?: string;
   createdAt: string;
+  guestId: string;
 }
 
 export interface BookingCreateInput {

@@ -12,24 +12,37 @@ const letters = [
 
 function SnappadLoader() {
   return (
-    <div className="flex items-end justify-center text-6xl md:text-8xl font-semibold select-none ">
+    <div className="flex items-end justify-center text-6xl md:text-8xl font-semibold select-none">
       {letters.map((l, i) => (
         <span
           key={i}
-          className={`inline-block ${l.color} animate-snappad-bounce`}
-          style={{ animationDelay: `${i * 0.3}s` }}
+          className={`inline-block ${l.color} animate-snappad-wiggle`}
+          style={{ animationDelay: `${i * 0.15}s` }}
         >
           {l.char}
         </span>
       ))}
       <style jsx>{`
-        @keyframes snappad-bounce {
-          0%, 100% { transform: translateY(0); }
-          20% { transform: translateY(-40%); }
-          40% { transform: translateY(0); }
+        @keyframes snappad-wiggle {
+          0%, 100% {
+            transform: translateY(0) rotate(0deg) scale(1);
+          }
+          20% {
+            transform: translateY(-30%) rotate(-5deg) scale(1.2);
+          }
+          40% {
+            transform: translateY(5%) rotate(5deg) scale(0.95);
+          }
+          60% {
+            transform: translateY(-15%) rotate(-3deg) scale(1.05);
+          }
+          80% {
+            transform: translateY(3%) rotate(2deg) scale(0.98);
+          }
         }
-        .animate-snappad-bounce {
-          animation: snappad-bounce 2s cubic-bezier(0,.56,.85,.92) infinite;
+        .animate-snappad-wiggle {
+          animation: snappad-wiggle 1.8s ease-in-out infinite;
+          display: inline-block;
         }
       `}</style>
     </div>

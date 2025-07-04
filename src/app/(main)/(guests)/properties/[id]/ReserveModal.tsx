@@ -12,6 +12,7 @@ import type { BookingCreateInput } from '@/types/booking';
 // Assuming GuestDropdown and DateInput are correctly defined and imported
 import GuestDropdown from "./GuestDropdown";
 import DateInput from "./DateInput";
+import ButtonLoader from "@/components/ui/ButtonLoader";
 
 export interface ReserveModalProps {
   propertyId: string;
@@ -196,7 +197,7 @@ function ReserveModal({
                 : "bg-primary hover:bg-tertiary"
             }`}
         >
-          {booking.loading ? "Reserving..." : "Reserve"}
+          {booking.loading ? <ButtonLoader />: "Reserve"}
         </button>
         <p className="text-neutral-500 text-sm mt-3 text-center">
           You won't be charged yet

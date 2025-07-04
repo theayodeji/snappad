@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Open_Sans } from 'next/font/google';
-import TextInput from '../../(guests)/properties/TextInput';
+import TextInput from '../../../../components/TextInput';
 
 const openSans = Open_Sans({ subsets: ['latin'] });
 

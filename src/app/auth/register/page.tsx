@@ -1,83 +1,96 @@
+// src/app/register/page.tsx
 "use client";
 import React, { useState } from "react";
-import { Eye, EyeOff, LifeBuoy } from "lucide-react"; // Updated icons for context
-import { FaGoogle, FaFacebookF } from "react-icons/fa"; // For social login icons
-import SignInForm from "../../../components/auth/SignInForm";
-import illustration from "../_assets/illustration.png"; // Adjust the path as necessary
+import Link from "next/link";
+import { MapPin, Home, LifeBuoy, ChevronRight } from "lucide-react"; // Icons for promotional content
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "react-hot-toast"; // For user feedback
 
-const LoginPage = () => {
+// Import the dedicated RegisterForm component
+import RegisterForm from "@/components/auth/RegisterForm";
+
+// Assuming illustration.png is in src/app/_assets/
+import illustration from "../_assets/illustration.png";
+
+const RegisterPage = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
 
-  const { login, loading, isAuthenticated, user } = useAuth();
+  const { register, loading } = useAuth();
 
-  console.log("User:", user);
-
-  // Placeholder for sign-in logic
-  const handleSignIn = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login({ email, password });
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
+    }
+    await register({ name, email, phone, password });
   };
 
-  // Placeholder for social login
   const handleGoogleSignIn = () => {
     console.log("Continue with Google clicked");
-    alert("Google Sign In functionality is a placeholder.");
+    toast.success("Google Sign Up functionality is a placeholder.");
   };
 
-  // Placeholder for social login
   const handleFacebookSignIn = () => {
     console.log("Continue with Facebook clicked");
-    alert("Facebook Sign In functionality is a placeholder.");
+    toast.success("Facebook Sign Up functionality is a placeholder.");
   };
 
   return (
     <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center font-inter">
-      {/* Main container for the two columns */}
+      {/* Main container for the two columns - Matches LoginPage structure */}
       <div
-        className="flex flex-col items-center justify-center md:flex-row w-full max-w-6xl bg-white dark:bg-black rounded-2xl overflow-hidden
-                  min-h-[675px] max-h-[calc(100vh-2rem)] md:max-h-[calc(100vh-2rem)] overflow-y-auto"
+        className="flex flex-col items-center justify-center md:flex-row w-full max-w-6xl bg-white dark:bg-black rounded-2xl
+                   min-h-[675px] overflow-y-auto"
       >
-        {/* Left Column: Sign-in Form */}
+        {/* Left Column: Register Form Content - Matches LoginPage left column styling */}
         <div className="w-full md:w-1/2 p-8 md:px-18 flex flex-col justify-center">
           <div className="mb-3">
             <h2 className="text-3xl md:text-4xl font-bold text-primary text-center">
-              Welcome
-              <span className="text-black dark:text-white"> back!</span>
+              <span className="text-black dark:text-white">Create</span> Your
+              Account
             </h2>
-            <p className="text-text-base dark:text-white text-sm mt-2">
-              Don't have an account?{" "}
-              <a href="#" className="text-primary hover:underline">
-                Create now
-              </a>
+            <p className="text-text-base dark:text-white text-sm mt-2 text-start">
+              {/* Added text-center here */}
+              Already have an account?{" "}
+              <Link href="/signin" className="text-primary hover:underline">
+                Sign in
+              </Link>
             </p>
           </div>
 
-          <SignInForm
+          {/* Dedicated RegisterForm component */}
+          <RegisterForm
+            name={name}
+            setName={setName}
             email={email}
             setEmail={setEmail}
+            phone={phone}
+            setPhone={setPhone}
             password={password}
             setPassword={setPassword}
+            confirmPassword={confirmPassword}
+            setConfirmPassword={setConfirmPassword}
             showPassword={showPassword}
             setShowPassword={setShowPassword}
-            rememberMe={rememberMe}
-            setRememberMe={setRememberMe}
-            onSignIn={handleSignIn}
+            loading={loading}
+            onSubmit={handleRegister}
             onGoogleSignIn={handleGoogleSignIn}
             onFacebookSignIn={handleFacebookSignIn}
-            loading={loading}
           />
         </div>
 
-        {/* Right Column: Promotional Content */}
+        {/* Right Column: Promotional Content - Directly copied from LoginPage */}
         <div className="hidden md:flex w-full md:w-1/2 bg-gradient-to-br from-primary-600 to-primary-800 dark:from-primary-800 dark:to-primary-950 p-8 md:p-12 text-white flex-col justify-between relative overflow-hidden">
           {/* Top Right Support */}
           <div className="absolute top-6 right-6 flex items-center text-gray-200 text-sm">
             <span className="mr-2">Support</span>
-            <LifeBuoy size={20} /> {/* Generic support icon */}
+            <LifeBuoy size={20} />
           </div>
 
           <img
@@ -102,4 +115,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

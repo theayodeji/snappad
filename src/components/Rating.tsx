@@ -13,7 +13,7 @@ const Rating: React.FC<RatingProps> = ({ value, max = 5, className = '' }) => {
         <svg
           key={i}
           className={
-            i < value ? 'text-yellow-500 fill-yellow-500 w-5 h-5' : 'text-secondary fill-secondary w-5 h-5'
+            `${i < value ? 'text-yellow-500 fill-yellow-500' : 'text-secondary fill-secondary'} w-4 h-4 sm:w-5 sm:h-5`
           }
           viewBox="0 0 20 20"
           fill="currentColor"

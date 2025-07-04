@@ -5,10 +5,12 @@ import axios from "axios";
 import { DateRange } from "react-day-picker";
 import { parseAxiosError } from "@/lib/parseAxiosError";
 import toast from "react-hot-toast";
-import type { UseBookingResult, BookingDetails, BookingCreateInput } from '@/types/booking';
+import type { UseBookingResult, BookingCreateInput } from '@/types/booking';
+import { useAuth } from "@/contexts/AuthContext";
 
 export function useBooking(): UseBookingResult {
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
+  const {user} = useAuth();
 
   const [availability, setAvailability] = useState({
     loading: false,
@@ -74,6 +76,7 @@ export function useBooking(): UseBookingResult {
         checkOutDate: bookingDetails.checkOutDate.toISOString(),
         numberOfGuests: bookingDetails.numberOfGuests,
         guestMessage: bookingDetails.guestMessage,
+        guestId: user?.id,
       });
 
       if (response.data.success) {

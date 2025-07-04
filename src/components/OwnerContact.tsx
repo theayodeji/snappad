@@ -6,7 +6,7 @@ export interface OwnerContactProps {
 }
 
 const OwnerContact: React.FC<OwnerContactProps> = ({ email, phone }) => (
-  <div className="hidden md:flex items-center gap-3 mt-2 ">
+  <div className="hidden md:flex items-center gap-3 ">
     <div className="lg:w-10 lg:h-10 w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-lg font-bold text-white">
       <span role="img" aria-label="avatar">👤</span>
     </div>
