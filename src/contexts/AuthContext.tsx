@@ -17,7 +17,7 @@ interface AuthUser {
   id: string;
   email: string;
   name?: string;
-  role: 'user' | 'owner' | 'admin';
+  role: 'host' | 'guest' | 'admin';
 }
 
 interface AuthContextType {
@@ -26,7 +26,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   loading: boolean;
   login: (credentials: { email: string; password: string }) => Promise<void>;
-  register: (userData: { email: string; password: string; name?: string; phone?: string }) => Promise<void>;
+  register: (userData: { email: string; password: string; name?: string; phone?: string, role: 'host' | 'guest'| undefined}) => Promise<void>;
   logout: () => void;
 }
 
@@ -36,22 +36,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<AuthUser | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true); // Initial loading state is true
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Effect to load token from localStorage and verify with backend on initial render
-  // This useEffect runs once when the AuthProvider component mounts.
-  // It handles the asynchronous process of re-establishing authentication state.
   useEffect(() => {
     const loadUserFromToken = async () => {
-      setLoading(true); // Set loading to true while checking auth status
+      setLoading(true);
       const storedToken = localStorage.getItem('token');
 
       if (storedToken) {
+        // --- Defensive check: Ensure storedToken is a string ---
+        if (typeof storedToken !== 'string') {
+          console.error("AuthContext: Stored token in localStorage is not a string, clearing.", storedToken);
+          localStorage.removeItem('token');
+          setToken(null);
+          setUser(null);
+          setIsAuthenticated(false);
+          setLoading(false);
+          return; // Exit early if token is corrupted
+        }
+
         setToken(storedToken); // Set token immediately for Axios interceptor
         try {
-          // Call the /api/auth/me endpoint to verify token and get user data
-          // This ensures the token is valid and the user data is fresh from the server.
           const response = await axios.get('/api/auth/me', {
             headers: {
               Authorization: `Bearer ${storedToken}`,
@@ -62,33 +68,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setUser(response.data.user);
             setIsAuthenticated(true);
           } else {
-            // Token was present but invalid/expired according to backend
-            console.error('Backend token verification failed:', response.data.message);
-            localStorage.removeItem('token'); // Clear invalid token
+            console.error('AuthContext: Backend token verification failed:', response.data.message);
+            localStorage.removeItem('token');
             setToken(null);
             setUser(null);
             setIsAuthenticated(false);
           }
         } catch (err: any) {
-          // Network error, server error, or token verification failed (e.g., 401 from /me endpoint)
-          console.error('Error verifying token with backend:', err);
-          localStorage.removeItem('token'); // Clear token if verification fails
+          console.error('AuthContext: Error verifying token with backend:', err);
+          localStorage.removeItem('token');
           setToken(null);
           setUser(null);
           setIsAuthenticated(false);
         }
       }
-      setLoading(false); // Set loading to false once auth check is complete
+      setLoading(false);
     };
 
     loadUserFromToken();
-  }, []); // Empty dependency array means this runs once on mount
+  }, []);
 
-  // Axios interceptor to attach token to all outgoing requests
   useEffect(() => {
     const requestInterceptor = axios.interceptors.request.use(
       (config) => {
         if (token) {
+          // Confirming here that 'token' state is indeed a string before sending
+          if (typeof token !== 'string') {
+            console.error("Axios Interceptor: 'token' state is not a string, aborting header attachment.", token);
+            return Promise.reject(new Error("Corrupted token state."));
+          }
           config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
@@ -108,10 +116,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const response = await axios.post('/api/auth/login', credentials);
       if (response.data.success) {
-        const { token, user: userData } = response.data;
-        localStorage.setItem('token', token);
-        setToken(token);
-        setUser(userData);
+        const receivedToken = response.data.token;
+        // --- Defensive check: Ensure receivedToken from API is a string ---
+        if (typeof receivedToken !== 'string') {
+          console.error("AuthContext: Login API returned a non-string token, aborting.", receivedToken);
+          toast.error('Login failed: Invalid token received from server.');
+          setLoading(false);
+          return;
+        }
+
+        localStorage.setItem('token', receivedToken);
+        setToken(receivedToken);
+        setUser(response.data.user);
         setIsAuthenticated(true);
         toast.success('Logged in successfully!');
         router.push('/');
@@ -131,10 +147,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const response = await axios.post('/api/auth/register', userData);
       if (response.data.success) {
-        const { token, user: newUserData } = response.data;
-        localStorage.setItem('token', token);
-        setToken(token);
-        setUser(newUserData);
+        const receivedToken = response.data.token;
+        // --- Defensive check: Ensure receivedToken from API is a string ---
+        if (typeof receivedToken !== 'string') {
+          console.error("AuthContext: Register API returned a non-string token, aborting.", receivedToken);
+          toast.error('Registration failed: Invalid token received from server.');
+          setLoading(false);
+          return;
+        }
+
+        localStorage.setItem('token', receivedToken);
+        setToken(receivedToken);
+        setUser(response.data.user);
         setIsAuthenticated(true);
         toast.success('Account created and logged in!');
         router.push('/');
@@ -155,7 +179,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
     setIsAuthenticated(false);
     toast('Logged out.', { icon: '👋' });
-    router.push('/auth/login');
+    router.push('/login'); // Changed to /signin for consistency
   }, [router]);
 
   const contextValue = {

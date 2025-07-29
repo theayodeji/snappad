@@ -7,28 +7,37 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "react-hot-toast"; // For user feedback
 
 // Import the dedicated RegisterForm component
-import RegisterForm from "@/components/auth/RegisterForm";
+import RegisterForm, { RegisterFormData } from "@/components/auth/RegisterForm";
 
 // Assuming illustration.png is in src/app/_assets/
 import illustration from "../_assets/illustration.png";
 
 const RegisterPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState<RegisterFormData>({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+    showPassword: false,
+    role: 'guest',
+  });
 
   const { register, loading } = useAuth();
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-    await register({ name, email, phone, password });
+    await register({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      password: formData.password,
+      role: formData.role, // Include role in registration
+    });
   };
 
   const handleGoogleSignIn = () => {
@@ -66,18 +75,8 @@ const RegisterPage = () => {
 
           {/* Dedicated RegisterForm component */}
           <RegisterForm
-            name={name}
-            setName={setName}
-            email={email}
-            setEmail={setEmail}
-            phone={phone}
-            setPhone={setPhone}
-            password={password}
-            setPassword={setPassword}
-            confirmPassword={confirmPassword}
-            setConfirmPassword={setConfirmPassword}
-            showPassword={showPassword}
-            setShowPassword={setShowPassword}
+            formData={formData}
+            setFormData={setFormData}
             loading={loading}
             onSubmit={handleRegister}
             onGoogleSignIn={handleGoogleSignIn}

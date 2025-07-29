@@ -9,7 +9,7 @@ export interface IUser extends Document {
     password: string; // Stored as hashed password
     name?: string;
     phone?: string;
-    role: "user" | "owner" | "admin"; // Example roles for future expansion
+    role: "guest" | "host" | "admin"; // Example roles for future expansion
     bookings: mongoose.Types.ObjectId[]; // NEW: Array of ObjectIds referencing Booking model
     savedProperties: mongoose.Types.ObjectId[]; // NEW: Array of ObjectIds referencing Property model
     avatar?: string; // Optional avatar image property (URL or path)
@@ -51,8 +51,8 @@ const UserSchema: Schema<IUser> = new mongoose.Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ["user", "owner", "admin"],
-      default: "user", // Default role for new registrations
+      enum: ["guest", "host", "admin"],
+      default: "guest", // Default role for new registrations
     },
     avatar: {
       type: String,

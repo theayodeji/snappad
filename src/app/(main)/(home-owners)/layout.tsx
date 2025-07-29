@@ -1,16 +1,22 @@
-import React from 'react';
+"use client"
+import React, { useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import HostSidebar from './_components/HostSidebar';
 
 export default function HomeOwnersLayout({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user?.role === 'guest') {
+      router.push('/');
+    }
+  }, [user, loading, router]);
+
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      {/* <aside style={{ width: '250px', background: '#f4f4f4', padding: '1rem' }}>
-        <h2>Sidebar</h2>
-        <ul>
-          <li>Link 1</li>
-          <li>Link 2</li>
-          <li>Link 3</li>
-        </ul>
-      </aside> */}
+      <HostSidebar />
       <main style={{ flex: 1, padding: '1rem' }}>
         {children}
       </main>

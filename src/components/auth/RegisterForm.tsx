@@ -5,20 +5,46 @@ import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
 import ButtonLoader from "../ui/ButtonLoader";
+import RoleSelector from "./RoleSelector";
 
-interface RegisterFormProps {
+export interface RegisterFormData {
   name: string;
-  setName: (v: string) => void;
   email: string;
-  setEmail: (v: string) => void;
   phone: string;
-  setPhone: (v: string) => void;
   password: string;
-  setPassword: (v: string) => void;
   confirmPassword: string;
-  setConfirmPassword: (v: string) => void;
   showPassword: boolean;
-  setShowPassword: (v: boolean) => void;
+  role?: "guest" | "host"; // Optional role field
+}
+
+export interface RegisterFormProps {
+  formData: RegisterFormData;
+  setFormData: React.Dispatch<React.SetStateAction<RegisterFormData>>;
+  loading: boolean;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onGoogleSignIn?: () => void;
+  onFacebookSignIn?: () => void;
+}
+
+export interface RegisterFormProps {
+  formData: {
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+    confirmPassword: string;
+    showPassword: boolean;
+    role?: "guest" | "host"; // Optional role field
+  };
+  setFormData: React.Dispatch<React.SetStateAction<{
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+    confirmPassword: string;
+    showPassword: boolean;
+    role?: 'host' | 'guest'; // Optional role field
+  }>>;
   loading: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onGoogleSignIn?: () => void;
@@ -26,18 +52,8 @@ interface RegisterFormProps {
 }
 
 function RegisterForm({
-  name,
-  setName,
-  email,
-  setEmail,
-  phone,
-  setPhone,
-  password,
-  setPassword,
-  confirmPassword,
-  setConfirmPassword,
-  showPassword,
-  setShowPassword,
+  formData,
+  setFormData,
   loading,
   onSubmit,
   onGoogleSignIn,
@@ -56,8 +72,8 @@ function RegisterForm({
         <input
           type="text"
           id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formData.name}
+          onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
           placeholder="John Doe"
           className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-black text-neutral-black dark:text-gray-100 focus:outline-none focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition duration-200"
           required
@@ -75,13 +91,17 @@ function RegisterForm({
         <input
           type="email"
           id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={formData.email}
+          onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
           placeholder="example@gmail.com"
           className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-black text-neutral-black dark:text-gray-100 focus:outline-none focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition duration-200"
           required
         />
       </div>
+      <RoleSelector
+        selectedRole={formData.role ?? null}
+        setSelectedRole={(role) => setFormData(prev => ({ ...prev, role }))}
+      />
 
       {/* Phone Number Field (Optional) */}
       <div>
@@ -94,8 +114,8 @@ function RegisterForm({
         <input
           type="tel"
           id="phone"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          value={formData.phone}
+          onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
           placeholder="+234 801 234 5678"
           className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-black text-neutral-black dark:text-gray-100 focus:outline-none focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition duration-200"
         />
@@ -111,20 +131,20 @@ function RegisterForm({
         </label>
         <div className="relative">
           <input
-            type={showPassword ? "text" : "password"}
+            type={formData.showPassword ? "text" : "password"}
             id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={(e) => setFormData((prev) => ({ ...prev, password: e.target.value }))}
             placeholder="Password"
             className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-black text-neutral-black dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-200 pr-10"
             required
           />
           <button
             type="button"
-            onClick={() => setShowPassword(!showPassword)}
+            onClick={() => setFormData((prev) => ({ ...prev, showPassword: !prev.showPassword }))}
             className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
           >
-            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            {formData.showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
       </div>
@@ -139,10 +159,10 @@ function RegisterForm({
         </label>
         <div className="relative">
           <input
-            type={showPassword ? "text" : "password"} // Use showPassword state for this too
+            type={formData.showPassword ? "text" : "password"}
             id="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={formData.confirmPassword}
+            onChange={(e) => setFormData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
             placeholder="Confirm Password"
             className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-black text-neutral-black dark:text-gray-100 focus:outline-none focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition duration-200"
             required
@@ -164,16 +184,16 @@ function RegisterForm({
       </button>
 
       {/* OR Divider */}
-      <div className="flex items-center my-6">
+      {/* <div className="flex items-center my-6">
         <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
         <span className="mx-4 text-gray-500 dark:text-gray-400 text-sm">
           OR
         </span>
         <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
-      </div>
+      </div> */}
 
       {/* Social Logins */}
-      <div className="space-y-4">
+      {/* <div className="space-y-4">
         <button
           type="button"
           onClick={onGoogleSignIn}
@@ -188,7 +208,7 @@ function RegisterForm({
         >
           <FaFacebookF className="mr-3 text-lg" /> Continue with Facebook
         </button>
-      </div>
+      </div> */}
     </form>
   );
 }

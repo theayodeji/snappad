@@ -5,9 +5,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 
-// Ensure these import paths are correct based on your file structure
-// If DesktopNavLinks, AuthButtonsOrUserMenu, MobileMenuOverlay are directly in src/components,
-// then '../' is correct. If they are in src/components/Navbar/, then './Navbar/' is correct.
 import DesktopNavLinks from '../DesktopNavLinks';
 import AuthButtonsOrUserMenu from '../AuthButtonsOrUserMenu';
 import MobileMenuOverlay from '../MobileMenuOverlay';
@@ -18,12 +15,12 @@ const Navbar = () => {
 
   // Define navLinks here as it's shared by both desktop and mobile components
   const navLinks = [
-    { name: 'Listings', href: '/', roles: ['user', 'owner', 'admin', 'visitor'] },
-    { name: 'About', href: '/about', roles: ['user', 'owner', 'admin', 'visitor'] }, // Re-added
-    { name: 'Contact', href: '/contact', roles: ['user', 'owner', 'admin', 'visitor'] }, // Re-added
-    { name: 'My Bookings', href: '/my-bookings', authRequired: true, roles: ['user', 'owner', 'admin'] },
-    { name: 'Saved', href: '/saved-properties', authRequired: true, roles: ['user', 'owner', 'admin'] },
-    { name: 'Owner Dashboard', href: '/owner/dashboard', authRequired: true, roles: ['owner', 'admin'] },
+    { name: 'Listings', href: '/', roles: ['guest', 'host', 'admin', 'visitor'] },
+    { name: 'About', href: '/about', roles: ['guest', 'host', 'admin', 'visitor'] }, // Re-added
+    { name: 'Contact', href: '/contact', roles: ['guest', 'host', 'admin', 'visitor'] }, // Re-added
+    { name: 'My Bookings', href: '/my-bookings', authRequired: true, roles: ['guest', 'admin'] },
+    { name: 'Saved', href: '/saved-properties', authRequired: true, roles: ['guest', 'admin'] },
+    { name: ' Dashboard', href: '/dashboard', authRequired: true, roles: ['host', 'admin'] },
   ];
 
   // Close mobile menu on outside click (logic remains in parent for now as it controls the overlay)

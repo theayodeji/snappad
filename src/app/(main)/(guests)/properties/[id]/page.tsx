@@ -36,8 +36,8 @@ const PropertyDetailsPage = () => {
     setLoading(true);
     fetchPropertyById(id)
       .then((data: any) => {
-        setProperty(data)
-    })
+        setProperty(data);
+      })
       .catch((err: any) => setError(err.message))
       .finally(() => setLoading(false));
   }, [id]);
@@ -54,7 +54,11 @@ const PropertyDetailsPage = () => {
 
   return (
     <div className="w-[90%] mx-auto my-10 max-w-5xl mb-32">
-      <PropertyHeader title={property.title} rating={property.rating} />
+      <PropertyHeader
+        title={property.title}
+        rating={property.rating}
+        propertyId={id}
+      />
       <PropertyImage
         src={property.imageUrls?.[0] || "/file.svg"}
         alt={property.title}
@@ -86,7 +90,16 @@ const PropertyDetailsPage = () => {
           setNumberOfGuests={setNumberOfGuests}
         />
       </div>
-      <PropertyFooterBar price={property.price} />
+      <PropertyFooterBar
+        propertyId={id}
+        propertyTitle={property.title}
+        propertyPrice={property.price}
+        propertyCapacity={property.capacity}
+        selectedDates={selected}
+        setSelectedDates={setSelected}
+        numberOfGuests={numberOfGuests}
+        setNumberOfGuests={setNumberOfGuests}
+      />
     </div>
   );
 };

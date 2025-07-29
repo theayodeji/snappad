@@ -37,10 +37,8 @@ function ReserveModal({
 
   const {
     isAvailable,
-    setIsAvailable,
     checkAvailability,
     submitBooking,
-    cancelBooking,
     resetBookingState,
     availability,
     booking,

@@ -35,9 +35,9 @@ const AuthButtonsOrUserMenu: React.FC<AuthButtonsOrUserMenuProps> = () => {
             <Link href="/saved-properties" className="flex items-center px-4 py-2 text-base dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-colors duration-300">
               <Bookmark size={16} className="mr-2" /> Saved Properties
             </Link>
-            {(user?.role === 'owner' || user?.role === 'admin') && (
-              <Link href="/owner/dashboard" className="flex items-center px-4 py-2 text-base dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-colors duration-300">
-                <LayoutDashboard size={16} className="mr-2" /> Owner Dashboard
+            {(user?.role === 'host' || user?.role === 'admin') && (
+              <Link href="/dashboard" className="flex items-center px-4 py-2 text-base dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-colors duration-300">
+                <LayoutDashboard size={16} className="mr-2" /> Host Dashboard
               </Link>
             )}
             <hr className="my-1 border-gray-200 dark:border-white/20" />

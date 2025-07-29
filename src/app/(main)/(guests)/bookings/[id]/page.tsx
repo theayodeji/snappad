@@ -9,6 +9,11 @@ import { parseAxiosError } from "@/lib/parseAxiosError"; // Your error parsing u
 import { format } from "date-fns";
 import { FaCheckCircle, FaBed, FaTimesCircle } from "react-icons/fa";
 import { MdDateRange, MdLocationOn } from "react-icons/md";
+// Import useAuth hook
+import { useAuth } from "@/contexts/AuthContext";
+import { useBooking } from "@/hooks/useBooking";
+
+// Assuming these are separate components you've created
 import PropertyInfo from "./PropertyInfo";
 import TripDetailsSummary from "./TripDetailsSummary";
 import ConfirmationMessage from "./ConfirmationMessage";
@@ -49,35 +54,9 @@ const BookingConfirmationPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!bookingId) {
-      setError("Booking ID not provided.");
-      setLoading(false);
-      return;
-    }
-
-    const fetchBookingDetails = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await axios.get(`/api/bookings/${bookingId}`);
-        if (response.data.success) {
-          setBooking(response.data.data);
-        } else {
-          setError(response.data.message || "Failed to fetch booking details.");
-        }
-      } catch (err: any) {
-        if (process.env.NODE_ENV === "development") {
-          console.error("Error fetching booking details:", err);
-        }
-        setError(parseAxiosError(err));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBookingDetails();
-  }, [bookingId]);
+  // Re-introduce useAuth hook to get authentication state
+  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { fetchBookingDetails } = useBooking();
 
   // Helper to format the full address
   const formatFullAddress = (location: Location) => {
@@ -92,7 +71,40 @@ const BookingConfirmationPage = () => {
     return parts.join(", ");
   };
 
-  if (loading) {
+  useEffect(() => {
+    if (!bookingId) {
+      setError("Booking ID not provided.");
+      setLoading(false);
+      return;
+    }
+    if (authLoading) {
+      return;
+    }
+
+    // Only fetch details if authenticated and auth loading is complete
+    if (!isAuthenticated && !authLoading) {
+      setError("You must be logged in to view this booking.");
+      setLoading(false); // Stop the component's own loading spinner
+      return;
+    }
+    if (isAuthenticated && !authLoading) {
+      setLoading(true);
+      setError(null);
+      fetchBookingDetails(bookingId).then(
+        ({ data, error }: { data: BookingDetails; error: string | null}) => {
+          if (data) {
+            setBooking(data);
+          } else {
+            setError(error || "Failed to fetch booking details.");
+          }
+          setLoading(false);
+        }
+      );
+    }
+  }, [bookingId, isAuthenticated, authLoading, fetchBookingDetails]); // Add isAuthenticated and authLoading to dependencies
+
+  // Show loader if either booking data or authentication state is loading
+  if (loading || authLoading) {
     return (
       <div className="h-[calc(100dvh-64px)] w-full flex items-center justify-center">
         <SnappadLoader />
@@ -185,7 +197,7 @@ const BookingConfirmationPage = () => {
             },
             {
               title: "Trip Start",
-              value: format(new Date(booking.checkInDate), "EEEE, dd MMM yyyy"),
+              value: format(new Date(booking.checkInDate), "EEEE, dd MMM yyyy"), // Corrected format string
               icon: <MdDateRange className="text-4xl text-primary" />,
             },
           ]}

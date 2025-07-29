@@ -8,7 +8,7 @@ interface Props {
 
 const DatePicker = ({ selectedDates, setSelectedDates }: Props) => {
   return (
-    <div className="w-max">
+    <div className="w-full md:w-max flex justify-center items-center">
       <DayPicker
         animate
         mode="range"

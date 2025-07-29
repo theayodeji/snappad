@@ -1,18 +1,20 @@
 // src/app/api/auth/login/route.ts
-
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import User from '@/models/User'; // Your User model
-import jwt from 'jsonwebtoken'; // For generating JWTs
+import { SignJWT } from 'jose';
 
 // Ensure you have a JWT secret in your environment variables
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key'; // CHANGE THIS IN PRODUCTION!
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key_very_long_and_random_for_dev'; // CHANGE THIS IN PRODUCTION!
+const encodedSecret = new TextEncoder().encode(JWT_SECRET);
 
 // Helper to generate a JWT token
-const generateToken = (id: string) => {
-  return jwt.sign({ id }, JWT_SECRET, {
-    expiresIn: '1d', // Token expires in 1 day
-  });
+const generateToken = async (id: string) => {
+  return new SignJWT({ id }) // Payload
+    .setProtectedHeader({ alg: 'HS256' }) // Algorithm for signing
+    .setIssuedAt() // Set 'iat' claim
+    .setExpirationTime('1d') // Token expires in 1 day
+    .sign(encodedSecret); // Sign with your secret
 };
 
 // POST /api/auth/login
@@ -43,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate JWT token
-    const token = generateToken(user._id.toString());
+    const token = await generateToken(user._id.toString());
 
     // Return success response
     return NextResponse.json(

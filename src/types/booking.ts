@@ -8,6 +8,9 @@ export interface UseBookingResult {
   submitBooking: (bookingDetails: BookingCreateInput) => Promise<any>;
   cancelBooking: (bookingId: string) => Promise<void>;
   resetBookingState: () => void;
+  fetchBookingDetails: (bookingId: string) => Promise<{ data: BookingDetails; error: string | null }>;
+  fetchUserBookings: () => Promise<{ data: BookingDetails[]; error: string | null }>;
+  
   availability: {
     loading: boolean;
     error: string | null;
@@ -21,6 +24,7 @@ export interface UseBookingResult {
     loading: boolean;
     error: string | null;
     success: boolean;
+    bookingId: string | null;
   };
 }
 
@@ -31,9 +35,10 @@ export interface BookingDetails {
   checkOutDate: string;
   numberOfGuests: number;
   totalPrice: number;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  paymentStatus: 'pending' | 'paid' | 'refunded';
   guestMessage?: string;
   createdAt: string;
-  guestId: string;
 }
 
 export interface BookingCreateInput {

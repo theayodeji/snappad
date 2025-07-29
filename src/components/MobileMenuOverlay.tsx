@@ -91,10 +91,10 @@ const MobileMenuOverlay: React.FC<MobileMenuOverlayProps> = ({
           </>
         ) : (
           <>
-            <Link href="/signin" onClick={() => setIsMobileMenuOpen(false)} className="block text-primary font-semibold py-2">
+            <Link href="/auth/login" onClick={() => setIsMobileMenuOpen(false)} className="block text-primary font-semibold py-2">
               Sign In
             </Link>
-            <Link href="/register" onClick={() => setIsMobileMenuOpen(false)} className="block bg-primary hover:bg-tertiary text-white px-4 py-2 rounded-full text-center transition-colors shadow-md">
+            <Link href="/auth/register" onClick={() => setIsMobileMenuOpen(false)} className="block bg-primary hover:bg-tertiary text-white px-4 py-2 rounded-full text-center transition-colors shadow-md">
               Sign Up
             </Link>
           </>
