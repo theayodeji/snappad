@@ -12,9 +12,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const { login, loading, isAuthenticated, user } = useAuth();
-
-  console.log("User:", user);
+  const { login, loading } = useAuth();
 
   // Placeholder for sign-in logic
   const handleSignIn = (e: React.FormEvent<HTMLFormElement>) => {
@@ -50,7 +48,7 @@ const LoginPage = () => {
             </h2>
             <p className="text-text-base dark:text-white text-sm mt-2">
               Don't have an account?{" "}
-              <a href="#" className="text-primary hover:underline">
+              <a href="/auth/register" className="text-primary hover:underline">
                 Create now
               </a>
             </p>

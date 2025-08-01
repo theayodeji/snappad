@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { FaTimesCircle } from "react-icons/fa";
 
@@ -19,9 +20,9 @@ function ErrorMessage({ error }: ErrorMessageProps) {
           Please ensure you have a stable internet connection and the booking ID is correct.
           If the problem persists, kindly try again later or contact our support team.
         </p>
-        <a href="/" className="inline-block mt-6 px-6 py-3 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-primary/90 transition-colors duration-300">
+        <Link href="/" className="inline-block mt-6 px-6 py-3 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-primary/90 transition-colors duration-300">
           Back to Home
-        </a>
+        </Link>
       </div>
     </div>
   );

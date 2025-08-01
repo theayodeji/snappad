@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { FaRegSadTear } from "react-icons/fa";
 
@@ -10,12 +11,12 @@ function NotFoundMessage() {
         <p className="text-lg text-neutral-700 dark:text-neutral-300 mb-4">
           The booking you are looking for does not exist or has been removed.
         </p>
-        <a
+        <Link
           href="/"
           className="inline-block mt-6 px-6 py-3 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-primary/90 transition-colors duration-300"
         >
           Back to Home
-        </a>
+        </Link>
       </div>
     </div>
   );

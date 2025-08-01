@@ -4,7 +4,7 @@ import OwnerContact from "./OwnerContact";
 import Link from "next/link";
 
 export interface PropertyCardProps {
-  id: number;
+  id: string;
   imageUrl: string;
   title: string;
   description: string;

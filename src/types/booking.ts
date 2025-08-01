@@ -5,7 +5,7 @@ export interface UseBookingResult {
   isAvailable: boolean | null;
   setIsAvailable: (value: boolean | null) => void;
   checkAvailability: (propertyId: string, dates: DateRange) => Promise<boolean>;
-  submitBooking: (bookingDetails: BookingCreateInput) => Promise<any>;
+  submitBooking: (bookingDetails: BookingCreateInput) => Promise<{ data: BookingDetails; error: string | null }>;
   cancelBooking: (bookingId: string) => Promise<void>;
   resetBookingState: () => void;
   fetchBookingDetails: (bookingId: string) => Promise<{ data: BookingDetails; error: string | null }>;
@@ -28,9 +28,11 @@ export interface UseBookingResult {
   };
 }
 
+import { Property } from './property';
+
 export interface BookingDetails {
   _id: string;
-  property: any; // Replace with PropertyDetails if available
+  property: Property;
   checkInDate: string;
   checkOutDate: string;
   numberOfGuests: number;

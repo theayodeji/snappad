@@ -65,7 +65,6 @@ const MyBookingsPage = () => {
 
     // If not authenticated after auth loading, redirect or show message
     if (!isAuthenticated) {
-      toast.error('Please log in to view your bookings.');
       router.push('/auth/login'); // Or your login route
       return;
     }

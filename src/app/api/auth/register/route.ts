@@ -1,31 +1,16 @@
-// src/app/api/auth/register/route.ts
-
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
-import User from '@/models/User'; // Your User model
-import { SignJWT } from 'jose';
+import User from '@/models/User';
+import Otp from '@/models/Otp';
+import { randomInt } from 'crypto';
+import { sendOtpMail } from '@/lib/mailer'; // You’ll define this
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key_very_long_and_random_for_dev'; // CHANGE THIS IN PRODUCTION!
-const encodedSecret = new TextEncoder().encode(JWT_SECRET);
-
-// Helper to generate a JWT token
-const generateToken = async (id: string) => {
-  return new SignJWT({ id }) // Payload
-    .setProtectedHeader({ alg: 'HS256' }) // Algorithm for signing
-    .setIssuedAt() // Set 'iat' claim
-    .setExpirationTime('1d') // Token expires in 1 day
-    .sign(encodedSecret); // Sign with your secret
-};
-
-// POST /api/auth/register
-// Handles user registration.
 export async function POST(request: NextRequest) {
   await dbConnect();
 
   try {
     const { email, password, name, phone, role } = await request.json();
 
-    // Basic validation
     if (!email || !password) {
       return NextResponse.json(
         { success: false, message: 'Email and password are required.' },
@@ -33,46 +18,48 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return NextResponse.json(
         { success: false, message: 'User with this email already exists.' },
-        { status: 409 } // 409 Conflict
+        { status: 409 }
       );
     }
 
-    // Create new user (password hashing handled by Mongoose pre-save hook)
+    // Create user with verified: false
     const user = await User.create({
       email,
       password,
       name,
       phone,
-      role
+      role,
+      verified: false,
     });
 
-    // Generate JWT token
-    const token = await generateToken(user._id.toString());
+    // Generate OTP
+    const otp = String(randomInt(100000, 999999));
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 min expiry
 
-    // Return success response
+    // Save OTP in DB
+    await Otp.findOneAndUpdate(
+      { user: user._id },
+      { otp, expiresAt },
+      { upsert: true }
+    );
+
+    // Send OTP
+    await sendOtpMail(email, otp);
+
     return NextResponse.json(
       {
         success: true,
-        message: 'User registered successfully.',
-        token,
-        user: {
-          id: user._id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        },
+        message: 'User registered. OTP sent to email.',
       },
-      { status: 201 } // 201 Created
+      { status: 201 }
     );
   } catch (error: any) {
     console.error('Registration error:', error);
 
-    // Handle Mongoose validation errors
     if (error.name === 'ValidationError') {
       const messages = Object.values(error.errors).map((val: any) => val.message);
       return NextResponse.json(

@@ -29,12 +29,12 @@ const AuthButtonsOrUserMenu: React.FC<AuthButtonsOrUserMenuProps> = () => {
             <Link href="/profile" className="flex items-center px-4 py-2 text-base dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-colors duration-300">
               <User size={16} className="mr-2" /> My Profile
             </Link>
-            <Link href="/my-bookings" className="flex items-center px-4 py-2 text-base dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-colors duration-300">
+            {user?.role === 'guest' && <Link href="/my-bookings" className="flex items-center px-4 py-2 text-base dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-colors duration-300">
               <HomeIcon size={16} className="mr-2" /> My Bookings
-            </Link>
-            <Link href="/saved-properties" className="flex items-center px-4 py-2 text-base dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-colors duration-300">
+            </Link>}
+            {user?.role === 'guest' && <Link href="/saved-properties" className="flex items-center px-4 py-2 text-base dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-colors duration-300">
               <Bookmark size={16} className="mr-2" /> Saved Properties
-            </Link>
+            </Link>}
             {(user?.role === 'host' || user?.role === 'admin') && (
               <Link href="/dashboard" className="flex items-center px-4 py-2 text-base dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-colors duration-300">
                 <LayoutDashboard size={16} className="mr-2" /> Host Dashboard

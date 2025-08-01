@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import User from '@/models/User'; // Your User model
 import { SignJWT } from 'jose';
+import Error from 'next/error';
 
 // Ensure you have a JWT secret in your environment variables
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key_very_long_and_random_for_dev'; // CHANGE THIS IN PRODUCTION!
@@ -44,6 +45,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!user.verified) {
+      
+      return NextResponse.json({
+        success: false,
+        requiresVerification: true,
+        message: 'Account not verified. Please verify your email.',
+        email: user.email,
+      }, { status: 403 });
+    }
+
     // Generate JWT token
     const token = await generateToken(user._id.toString());
 
@@ -58,14 +69,20 @@ export async function POST(request: NextRequest) {
           email: user.email,
           name: user.name,
           role: user.role,
+          verified: user.verified,
         },
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (err) {
+    const error = err as Error;
     console.error('Login error:', error);
     return NextResponse.json(
-      { success: false, message: 'Server error.', error: error.message },
+      { 
+        success: false, 
+        message: 'Server error.',
+        error: error
+      },
       { status: 500 }
     );
   }

@@ -1,11 +1,22 @@
 "use client";
-import Image from "next/image";
 import PropertyCard from "@/components/PropertyCard";
 import { usePropertyList } from "@/hooks/useProperties";
 import SnappadLoader from "@/components/SnappadLoader";
+import { Property } from "@/types/property";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
   const { properties, loadingProperties, propertiesError } = usePropertyList();
+  const {user} = useAuth();
+  const navigate = useRouter();
+
+  useEffect(() => {
+    if (user && user.role === "host") {
+      navigate.push("/dashboard");
+    }
+  }, [user, navigate]);
 
   return (
     <div className="grid grid-rows-[0_1fr_0px] items-center justify-items-center md:min-h-[calc(100dvh-72px)] sm:px-20">
@@ -20,7 +31,7 @@ export default function Home() {
         )}
         <div className="flex flex-wrap items-stretch justify-center gap-4 mx-auto w-full">
           {properties.length > 0
-            ? properties.map((property: any) => (
+            ? properties.map((property: Property) => (
                 <PropertyCard
                   key={property._id}
                   id={property._id}

@@ -15,9 +15,9 @@ export default function HomeOwnersLayout({ children }: { children: React.ReactNo
   }, [user, loading, router]);
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <div className="flex items-start">
       <HostSidebar />
-      <main style={{ flex: 1, padding: '1rem' }}>
+      <main className="flex-1 p-4">
         {children}
       </main>
     </div>

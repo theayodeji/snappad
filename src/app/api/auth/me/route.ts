@@ -53,6 +53,7 @@ export async function GET(request: NextRequest) {
           email: user.email,
           name: user.name,
           role: user.role,
+          verified: user.verified,
           // Add any other non-sensitive user fields you want the frontend to have
         },
       },

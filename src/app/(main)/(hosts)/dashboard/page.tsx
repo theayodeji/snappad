@@ -47,14 +47,9 @@ const HostDashboard: React.FC = () => {
       <DashboardGreeting />
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <DashboardStat label="Total Listings" value={totalListings} />
-        <DashboardStat label="Current Occupants" value={currentOccupants} />
-        <DashboardStat
-          label="Available Properties"
-          value={totalListings - currentOccupants}
-        />
-      </div>
+      <div className="">
+        
+      </div> 
 
       {/* Recent Listings */}
       <div>

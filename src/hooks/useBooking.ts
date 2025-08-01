@@ -103,7 +103,7 @@ export function useBooking(): UseBookingResult {
   );
 
   const submitBooking = useCallback(
-    async (bookingDetails: BookingCreateInput): Promise<any> => {
+    async (bookingDetails: BookingCreateInput): Promise<{ data: BookingDetails; error: string | null }> => {
       setBooking({ loading: true, error: null, success: false, data: null }); // Reset data on new submission
 
       if (!isAuthenticated || !user?.id) {
@@ -135,7 +135,7 @@ export function useBooking(): UseBookingResult {
             data: response.data.data,
           }); // Store successful data
           toast.success("Booking created successfully!");
-          return response.data.data;
+          return response.data;
         } else {
           const message = response.data.message || "Failed to create booking.";
           setBooking({

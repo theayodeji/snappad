@@ -7,26 +7,7 @@ import { FaGoogle, FaFacebookF } from "react-icons/fa";
 import ButtonLoader from "../ui/ButtonLoader";
 import RoleSelector from "./RoleSelector";
 
-export interface RegisterFormData {
-  name: string;
-  email: string;
-  phone: string;
-  password: string;
-  confirmPassword: string;
-  showPassword: boolean;
-  role?: "guest" | "host"; // Optional role field
-}
-
-export interface RegisterFormProps {
-  formData: RegisterFormData;
-  setFormData: React.Dispatch<React.SetStateAction<RegisterFormData>>;
-  loading: boolean;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  onGoogleSignIn?: () => void;
-  onFacebookSignIn?: () => void;
-}
-
-export interface RegisterFormProps {
+interface RegisterFormProps {
   formData: {
     name: string;
     email: string;

@@ -1,10 +1,8 @@
-import MobileBookingButton from "./MobileBookingButton";
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import MobileBookingModal from "./MobileBookingModal";
 import { useBooking } from "@/hooks/useBooking"; // Assuming this hook exists
 import { useBookingCalculation } from "@/hooks/useBookingCalculation"; // Assuming this hook exists
-import { format } from "date-fns";
 import { toast } from "react-hot-toast"; // For user feedback
 
 import { ReserveModalProps } from "./ReserveModal"; // Corrected import path based on your input
@@ -65,6 +63,15 @@ export default function PropertyFooterBar({
     resetBookingState,
   ]);
 
+  const handleOpenModal = () => {
+    setIsReserveModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsReserveModalOpen(false);
+    resetBookingState(); // Reset booking state when modal closes
+    setGuestMessage(""); // Clear guest message on close
+  };
   // Effect to handle booking submission success/failure
   useEffect(() => {
     // Corrected check: submittedBooking.success is the correct flag
@@ -77,18 +84,7 @@ export default function PropertyFooterBar({
     } else if (submittedBooking.error && !submittedBooking.loading) {
       toast.error(`Booking failed: ${submittedBooking.error}`);
     }
-  }, [submittedBooking]); // Dependency on submittedBooking object
-
-  const handleOpenModal = () => {
-    setIsReserveModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsReserveModalOpen(false);
-    resetBookingState(); // Reset booking state when modal closes
-    setGuestMessage(""); // Clear guest message on close
-  };
-
+  }, [submittedBooking, handleCloseModal]); // Dependency on submittedBooking object
   const handleSubmitBooking = async () => {
     if (
       !selectedDates?.from ||
@@ -132,21 +128,23 @@ export default function PropertyFooterBar({
               <span className="text-sm font-semibold text-black">/night</span>
             </span>
             <span className="text-sm text-gray-400">10% off this week!</span>
-           {isAvailable !== null && <span
-              className={`text-xs font-medium ${
-                availability.loading  && isAvailable !== null
-                  ? "text-blue-500"
+            {isAvailable !== null && (
+              <span
+                className={`text-xs font-medium ${
+                  availability.loading && isAvailable !== null
+                    ? "text-blue-500"
+                    : isAvailable
+                    ? "text-green-500"
+                    : "text-red-500"
+                }`}
+              >
+                {availability.loading && isAvailable !== null
+                  ? "Checking availability..."
                   : isAvailable
-                  ? "text-green-500"
-                  : "text-red-500"
-              }`}
-            >
-              {availability.loading && isAvailable !== null
-                ? "Checking availability..."
-                : isAvailable
-                ? "Property is available!"
-                : "Property is not available for these dates."}
-            </span>}
+                  ? "Property is available!"
+                  : "Property is not available for these dates."}
+              </span>
+            )}
           </div>
           <button
             onClick={handleOpenModal}

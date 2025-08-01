@@ -1,6 +1,6 @@
 // hooks/usePropertyList.ts
 import { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { toast } from "react-hot-toast"; // For user feedback
 import { parseAxiosError } from "@/lib/parseAxiosError"; // Your error parsing utility
 import { useAuth } from "@/contexts/AuthContext"; // Import your AuthContext hook
@@ -78,7 +78,7 @@ export function usePropertyList() {
           if (res.data.success) {
             // Assuming backend returns an array of populated Property objects or objects with propertyId
             // If it returns Property objects, you'd map to their _id:
-            const savedIds = res.data.data.map((favItem: any) => favItem._id); // Assuming favItem is a Property object
+            const savedIds = res.data.data.map((favItem: Property) => favItem._id); // Assuming favItem is a Property object
             setFavoritePropertyIds(savedIds);
           } else {
             setFavoritesError(

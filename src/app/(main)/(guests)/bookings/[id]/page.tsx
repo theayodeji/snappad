@@ -3,11 +3,9 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import axios from "axios";
 import SnappadLoader from "@/components/SnappadLoader"; // Your loader component
-import { parseAxiosError } from "@/lib/parseAxiosError"; // Your error parsing utility
 import { format } from "date-fns";
-import { FaCheckCircle, FaBed, FaTimesCircle } from "react-icons/fa";
+import { FaBed, FaTimesCircle } from "react-icons/fa";
 import { MdDateRange, MdLocationOn } from "react-icons/md";
 // Import useAuth hook
 import { useAuth } from "@/contexts/AuthContext";
@@ -17,6 +15,7 @@ import { useBooking } from "@/hooks/useBooking";
 import PropertyInfo from "./PropertyInfo";
 import TripDetailsSummary from "./TripDetailsSummary";
 import ConfirmationMessage from "./ConfirmationMessage";
+import Link from "next/link";
 
 interface Location {
   address: string;
@@ -130,12 +129,12 @@ const BookingConfirmationPage = () => {
             ID is correct. If the problem persists, kindly try again later or
             contact our support team.
           </p>
-          <a
+          <Link
             href="/"
             className="inline-block mt-6 px-6 py-3 bg-primary-500 text-white font-semibold rounded-lg shadow-md hover:bg-primary-600 transition-colors duration-300"
           >
             Back to Home
-          </a>
+          </Link>
         </div>
       </div>
     );

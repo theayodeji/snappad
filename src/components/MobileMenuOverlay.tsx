@@ -77,9 +77,9 @@ const MobileMenuOverlay: React.FC<MobileMenuOverlayProps> = ({
             <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center text-neutral-dark dark:text-gray-200 hover:text-primary py-2">
               <User size={20} className="mr-3" /> My Profile
             </Link>
-            {(user?.role === 'owner' || user?.role === 'admin') && (
-              <Link href="/owner/dashboard" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center text-neutral-dark dark:text-gray-200 hover:text-primary py-2">
-                <LayoutDashboard size={20} className="mr-3" /> Owner Dashboard
+            {(user?.role === 'host' || user?.role === 'admin') && (
+              <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center text-neutral-dark dark:text-gray-200 hover:text-primary py-2">
+                <LayoutDashboard size={20} className="mr-3" /> Host Dashboard
               </Link>
             )}
             <button

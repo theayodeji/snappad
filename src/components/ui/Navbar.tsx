@@ -15,7 +15,7 @@ const Navbar = () => {
 
   // Define navLinks here as it's shared by both desktop and mobile components
   const navLinks = [
-    { name: 'Listings', href: '/', roles: ['guest', 'host', 'admin', 'visitor'] },
+    { name: 'Listings', href: '/', roles: ['guest', 'admin', 'visitor'] },
     { name: 'About', href: '/about', roles: ['guest', 'host', 'admin', 'visitor'] }, // Re-added
     { name: 'Contact', href: '/contact', roles: ['guest', 'host', 'admin', 'visitor'] }, // Re-added
     { name: 'My Bookings', href: '/my-bookings', authRequired: true, roles: ['guest', 'admin'] },

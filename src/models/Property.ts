@@ -25,7 +25,7 @@ export interface IProperty extends Document { // Extend Document to include _id,
   beds?: number; // New: Number of beds
   bathrooms?: number; // New: Number of bathrooms
   propertyType: 'Apartment' | 'House' | 'Condo' | 'Room' | 'Villa' | 'Other'; // New: Type of property
-  // owner?: mongoose.Types.ObjectId; // Future: reference to User model if authentication is added
+  hostId?: mongoose.Types.ObjectId; // Future: reference to User model if authentication is added
   // isAvailable?: boolean; // You typically don't store this directly, but calculate from bookings
 }
 
@@ -85,11 +85,11 @@ const PropertySchema: Schema<IProperty> = new mongoose.Schema<IProperty>({
     enum: ['Apartment', 'House', 'Condo', 'Room', 'Villa', 'Other'],
     required: [true, 'Property type is required.'],
   },
-  // owner: { // Future: uncomment and add this if/when you implement User authentication
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'User', // Refers to your User model
-  //   required: true, // A property must have an owner
-  // },
+  hostId: { // Future: uncomment and add this if/when you implement User authentication
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Refers to your User model
+    required: true, // A property must have an owner
+  },
 }, { timestamps: true });
 
 export default mongoose.models.Property || mongoose.model<IProperty>('Property', PropertySchema);

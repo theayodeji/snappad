@@ -1,7 +1,7 @@
 // src/app/properties/[id]/ReserveModal.tsx
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { DateRange } from "react-day-picker";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation"; // Don't forget to import useRouter!
@@ -104,8 +104,11 @@ function ReserveModal({
         numberOfGuests,
       } as BookingCreateInput);
 
-      router.push(`/bookings/${bookingData._id}`); // Navigate to confirmation page
+      console.log(bookingData.data)
+
+      router.push(`/bookings/${bookingData.data._id}`); // Navigate to confirmation page
     } catch (err) {
+      console.log(err)
       alert(booking.error || "Booking failed. Please try again.");
     }
   };

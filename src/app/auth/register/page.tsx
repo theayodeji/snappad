@@ -7,10 +7,20 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "react-hot-toast"; // For user feedback
 
 // Import the dedicated RegisterForm component
-import RegisterForm, { RegisterFormData } from "@/components/auth/RegisterForm";
+import RegisterForm from "@/components/auth/RegisterForm";
 
 // Assuming illustration.png is in src/app/_assets/
 import illustration from "../_assets/illustration.png";
+
+interface RegisterFormData{
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  confirmPassword: string;
+  showPassword: boolean;
+  role?: 'guest' | 'host' | undefined; // Assuming role can be either guest or host
+}
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState<RegisterFormData>({
@@ -67,7 +77,7 @@ const RegisterPage = () => {
             <p className="text-text-base dark:text-white text-sm mt-2 text-start">
               {/* Added text-center here */}
               Already have an account?{" "}
-              <Link href="/signin" className="text-primary hover:underline">
+              <Link href="/auth/login" className="text-primary hover:underline">
                 Sign in
               </Link>
             </p>
