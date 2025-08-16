@@ -7,7 +7,7 @@ import Booking, { IBooking } from '@/models/Booking';
 // Checks if a property is available for a given date range.
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
 
@@ -54,10 +54,6 @@ export async function GET(
     }
 
     // --- 3. Check for Overlapping Bookings ---
-    // Find any *confirmed* bookings for this property that overlap with the requested dates.
-    // An overlap occurs if:
-    // (startDate1 <= endDate2) AND (endDate1 >= startDate2)
-    // Here: (checkInDate <= existingBooking.checkOutDate) AND (checkOutDate >= existingBooking.checkInDate)
     const overlappingBookings: IBooking[] = await Booking.find({
       property: id,
       status: { $in: ['pending', 'confirmed'] }, // Consider 'pending' bookings as well for availability

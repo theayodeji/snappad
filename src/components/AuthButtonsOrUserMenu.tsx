@@ -3,8 +3,9 @@ import React from 'react';
 import Link from 'next/link';
 import { User, LogOut, Bookmark, Home as HomeIcon, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { toast } from 'react-hot-toast';
 
+
+//eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface AuthButtonsOrUserMenuProps {
   // No props needed as it uses useAuth directly
 }

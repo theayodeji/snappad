@@ -3,7 +3,10 @@ import dbConnect from "@/lib/dbConnect";
 import User from "@/models/User";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(request: NextRequest, { params }: { params: { propertyId: string } }) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   await dbConnect(); // Connect to the database
 
   try {
@@ -12,7 +15,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { prope
     const userId = decodedToken.id; // The ID of the authenticated user
 
     // 2. Get the propertyId from the dynamic route parameters
-    const { propertyId } = params;
+    const { id: propertyId } = await params;
 
     // 3. Find the user
     const user = await User.findById(userId);

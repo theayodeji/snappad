@@ -1,9 +1,7 @@
 // src/components/Auth/RegisterForm.tsx
 "use client";
 import React from "react";
-import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
-import { FaGoogle, FaFacebookF } from "react-icons/fa";
 import ButtonLoader from "../ui/ButtonLoader";
 import RoleSelector from "./RoleSelector";
 

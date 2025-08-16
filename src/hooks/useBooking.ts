@@ -17,17 +17,17 @@ interface PropertyDetailsForBooking {
   price: number;
 }
 
-interface FetchedBooking {
-  _id: string;
-  property: PropertyDetailsForBooking;
-  checkInDate: string;
-  checkOutDate: string;
-  numberOfGuests: number;
-  totalPrice: number;
-  status: string; // e.g., 'pending', 'confirmed', 'cancelled'
-  paymentStatus: string; // e.g., 'pending', 'paid'
-  createdAt: string;
-}
+// interface FetchedBooking {
+//   _id: string;
+//   property: PropertyDetailsForBooking;
+//   checkInDate: string;
+//   checkOutDate: string;
+//   numberOfGuests: number;
+//   totalPrice: number;
+//   status: string; // e.g., 'pending', 'confirmed', 'cancelled'
+//   paymentStatus: string; // e.g., 'pending', 'paid'
+//   createdAt: string;
+// }
 
 export function useBooking(): UseBookingResult {
   const { user, isAuthenticated, loading: authLoading } = useAuth(); // Get user and auth status

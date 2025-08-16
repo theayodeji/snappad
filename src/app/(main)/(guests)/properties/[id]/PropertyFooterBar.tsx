@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { X } from "lucide-react";
 import MobileBookingModal from "./MobileBookingModal";
 import { useBooking } from "@/hooks/useBooking"; // Assuming this hook exists
@@ -6,6 +6,7 @@ import { useBookingCalculation } from "@/hooks/useBookingCalculation"; // Assumi
 import { toast } from "react-hot-toast"; // For user feedback
 
 import { ReserveModalProps } from "./ReserveModal"; // Corrected import path based on your input
+import router from "next/router";
 
 interface PropertyFooterBarProps extends ReserveModalProps {
   propertyTitle: string; // Keeping this prop as requested
@@ -67,11 +68,11 @@ export default function PropertyFooterBar({
     setIsReserveModalOpen(true);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setIsReserveModalOpen(false);
     resetBookingState(); // Reset booking state when modal closes
     setGuestMessage(""); // Clear guest message on close
-  };
+  }, [resetBookingState]);
   // Effect to handle booking submission success/failure
   useEffect(() => {
     // Corrected check: submittedBooking.success is the correct flag
@@ -108,13 +109,14 @@ export default function PropertyFooterBar({
     }
     // Call submitBooking from useBooking hook
     // Ensure submitBooking expects an object as per your API route
-    await submitBooking({
+    const bookingData = await submitBooking({
       propertyId,
       checkInDate: selectedDates.from,
       checkOutDate: selectedDates.to,
       numberOfGuests,
       guestMessage,
     });
+    router.push(`/bookings/${bookingData.data._id}`); // Navigate to confirmation page
   };
 
   return (

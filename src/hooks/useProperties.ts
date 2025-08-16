@@ -1,6 +1,6 @@
 // hooks/usePropertyList.ts
 import { useEffect, useState, useCallback } from "react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { toast } from "react-hot-toast"; // For user feedback
 import { parseAxiosError } from "@/lib/parseAxiosError"; // Your error parsing utility
 import { useAuth } from "@/contexts/AuthContext"; // Import your AuthContext hook

@@ -4,10 +4,10 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "@/contexts/AuthContext";
 
-const sora = Sora({
-  variable: "--font-sora",
-  subsets: ["latin"],
-});
+// const sora = Sora({
+//   variable: "--font-sora",
+//   subsets: ["latin"],
+// });
 
 export const metadata: Metadata = {
   title: "Snappad",

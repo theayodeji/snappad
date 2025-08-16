@@ -2,6 +2,7 @@
 
 import React from "react";
 import DashboardGreeting from "../_components/DashboardGreeting";
+import { ArrowUpRight } from "lucide-react";
 
 type Listing = {
   id: string;
@@ -39,17 +40,52 @@ const dummyListings: Listing[] = [
 ];
 
 const HostDashboard: React.FC = () => {
-  const totalListings = dummyListings.length;
-  const currentOccupants = dummyListings.filter((l) => l.isOccupied).length;
 
   return (
     <div className="p-6 space-y-6">
       <DashboardGreeting />
 
-      {/* Stats */}
+      {/* Properties Stats */}
       <div className="">
-        
-      </div> 
+        {/* Booking Info */}
+        {false ? (
+          <div className="flex justify-between items-center p-6 dark:bg-neutral-800 bg-neutral-100 rounded-lg shadow">
+            <div className=" flex flex-col gap-2 mb-4 ">
+              <div className="text-xl">
+                <span className="font-semibold">Next Booking:</span>
+                <span className="ml-2">
+                  {dummyListings.find((l) => l.isOccupied)?.title || "N/A"}
+                </span>
+                <span className="">, 12 August 2025</span>
+              </div>
+              <div className="text-lg">
+                <span className="font-semibold">Guest Name:</span>
+                <span className="ml-2">
+                  {dummyListings.find((l) => l.isOccupied)?.occupantName ||
+                    "N/A"}
+                </span>
+              </div>
+              <a href="#contact-user" className="text-primary hover:underline">
+                Contact Guest <ArrowUpRight size={16} className="inline" />
+              </a>
+            </div>
+            <img src="/occupied.png" alt="occupied" className="w-72" />
+          </div>
+        ) : (
+          <div className="p-8 py-10 dark:bg-neutral-800 bg-neutral-100 rounded-lg shadow flex justify-between items-center gap-2 mb-4">
+            <div className="">
+              <div className="text-3xl font-semibold">
+                No upcoming bookings.
+              </div>
+              <a href="#view-history" className="text-primary text-lg hover:underline">
+                View Performance/History
+                <ArrowUpRight size={16} className="inline" />
+              </a>
+            </div>
+            <img src="/vacant.png" alt="vacant" className="w-72" />
+          </div>
+        )}
+      </div>
 
       {/* Recent Listings */}
       <div>
@@ -85,20 +121,5 @@ const HostDashboard: React.FC = () => {
     </div>
   );
 };
-
-const DashboardStat = ({
-  label,
-  value,
-}: {
-  label: string;
-  value: number;
-}) => (
-  <div className="bg-white dark:bg-neutral-900 p-4 rounded-xl shadow-md">
-    <h3 className="text-lg font-semibold text-neutral-700 dark:text-white">
-      {label}
-    </h3>
-    <p className="text-3xl mt-2 text-primary font-bold">{value}</p>
-  </div>
-);
 
 export default HostDashboard;

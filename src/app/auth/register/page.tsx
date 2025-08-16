@@ -2,7 +2,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { MapPin, Home, LifeBuoy, ChevronRight } from "lucide-react"; // Icons for promotional content
+import { LifeBuoy } from "lucide-react"; // Icons for promotional content
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "react-hot-toast"; // For user feedback
 

@@ -32,24 +32,24 @@ interface PropertyDetails {
 // Define BookingDetails interface (as returned by /api/bookings GET)
 interface BookingDetails {
   _id: string;
-  property: PropertyDetails; // Populated property details
-  checkInDate: string; // ISO string
-  checkOutDate: string; // ISO string
+  property: PropertyDetails;
+  checkInDate: string; 
+  checkOutDate: string;
   numberOfGuests: number;
   totalPrice: number;
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed'; // Add more statuses as needed
-  paymentStatus: 'pending' | 'paid' | 'refunded'; // Add payment status
-  createdAt: string; // ISO string
+  paymentStatus: 'pending' | 'paid' | 'refunded'; 
+  createdAt: string;
 }
 
 
 const MyBookingsPage = () => {
   const router = useRouter();
-  const { isAuthenticated, loading: authLoading } = useAuth(); // Get auth state and loading from useAuth
+  const { isAuthenticated, loading: authLoading } = useAuth(); 
   const {
-    fetchUserBookings, // Now correctly available from useBooking
+    fetchUserBookings, 
     cancelBooking,
-    cancellation, // State from useBooking for cancellation process (now includes bookingId)
+    cancellation, 
   } = useBooking();
 
   const [bookings, setBookings] = useState<BookingDetails[]>([]);
@@ -58,14 +58,12 @@ const MyBookingsPage = () => {
 
   // Effect to fetch bookings when component mounts or auth state changes
   useEffect(() => {
-    // Wait for authentication to finish loading
     if (authLoading) {
       return;
     }
 
-    // If not authenticated after auth loading, redirect or show message
     if (!isAuthenticated) {
-      router.push('/auth/login'); // Or your login route
+      router.push('/auth/login');
       return;
     }
 
@@ -96,22 +94,21 @@ const MyBookingsPage = () => {
   useEffect(() => {
     if (cancellation.success) {
       toast.success('Booking cancelled successfully!');
-      // Optimistically update the status of the cancelled booking in the list
       setBookings(prev =>
         prev.map(booking =>
-          booking._id === cancellation.bookingId // Use cancellation.bookingId directly from useBooking
-            ? { ...booking, status: 'cancelled', paymentStatus: 'refunded' } // Update status
+          booking._id === cancellation.bookingId
+            ? { ...booking, status: 'cancelled', paymentStatus: 'refunded' }
             : booking
         )
       );
     } else if (cancellation.error) {
       toast.error(`Cancellation failed: ${cancellation.error}`);
     }
-  }, [cancellation]); // Dependency on cancellation object from useBooking
+  }, [cancellation]);
 
   const handleCancelBooking = async (bookingId: string) => {
     if (window.confirm("Are you sure you want to cancel this booking? This action cannot be undone.")) {
-      await cancelBooking(bookingId); // Call the actual cancel function from useBooking
+      await cancelBooking(bookingId);
     }
   };
 

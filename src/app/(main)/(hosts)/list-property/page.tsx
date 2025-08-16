@@ -77,6 +77,7 @@ export default function ListPropertyPage() {
         alert(`Error: ${result.message}`);
       }
     } catch (error) {
+      console.error('Error listing property:', error);
       alert('An error occurred while listing the property.');
     }
   };

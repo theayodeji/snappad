@@ -23,11 +23,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   description,
   price,
   badge,
-  footerLeft,
   id,
   ownerEmail,
   ownerPhone,
-  footerRight,
 }) => (
   <Link
     href={`/properties/${id}`}

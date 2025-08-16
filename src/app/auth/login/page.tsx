@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { Eye, EyeOff, LifeBuoy } from "lucide-react"; // Updated icons for context
-import { FaGoogle, FaFacebookF } from "react-icons/fa"; // For social login icons
+import { LifeBuoy } from "lucide-react"; // Updated icons for context
 import SignInForm from "../../../components/auth/SignInForm";
 import illustration from "../_assets/illustration.png"; // Adjust the path as necessary
 import { useAuth } from "@/contexts/AuthContext";
+import Link from "next/link";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -48,9 +48,9 @@ const LoginPage = () => {
             </h2>
             <p className="text-text-base dark:text-white text-sm mt-2">
               Don't have an account?{" "}
-              <a href="/auth/register" className="text-primary hover:underline">
+              <Link href="/auth/register" className="text-primary hover:underline">
                 Create now
-              </a>
+              </Link>
             </p>
           </div>
 

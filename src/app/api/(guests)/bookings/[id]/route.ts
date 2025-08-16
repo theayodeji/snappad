@@ -9,7 +9,7 @@ import { verifyAuth } from "@/lib/auth";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } } // Get the dynamic 'id' from params
+  { params }: { params: Promise<{ id: string }> } // Get the dynamic 'id' from params
 ) {
   await dbConnect(); // Connect to your database
 
@@ -22,17 +22,17 @@ export async function GET(
     // Validate if the ID is a valid MongoDB ObjectId
     const booking = await Booking.findById(id).populate("property");
 
-    if (userId !== booking?.guestId.toString()) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized access to this booking." },
-        { status: 403 } // Forbidden
-      );
-    }
-
     if (!booking) {
       return NextResponse.json(
         { success: false, message: "Booking not found." },
         { status: 404 }
+      );
+    }
+
+    if (userId !== booking?.guestId.toString()) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized access to this booking." },
+        { status: 403 } // Forbidden
       );
     }
 
@@ -56,11 +56,11 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
 
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const booking = await Booking.findByIdAndDelete(id);
