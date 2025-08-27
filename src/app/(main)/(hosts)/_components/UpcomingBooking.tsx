@@ -56,7 +56,7 @@ const UpcomingBooking = () => {
   return (
     <div className="flex justify-between items-center p-6 dark:bg-neutral-800 bg-white rounded-lg shadow">
       <div className="flex flex-col gap-2 items-start">
-        <div className="text-lg md:text-xl">
+        <div className="text-base sm:text-lg md:text-xl">
           <span className="font-semibold">Next Booking:</span>
           <span className="ml-2">
             {nextBooking.property?.title || "N/A"},
@@ -65,7 +65,7 @@ const UpcomingBooking = () => {
             <span className="ml-2"> {formattedDate}</span>
           )}
         </div>
-        <div className="text-md md:text-lg">
+        <div className="text-sm sm:text-md md:text-lg">
           <span className="font-semibold">Guest Name:</span>
           <span className="ml-2">
             {nextBooking.guest?.name || "N/A"}
