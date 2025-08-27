@@ -13,51 +13,60 @@ export interface PropertyCardProps {
   rating?: number;
   ownerEmail: string;
   ownerPhone: string;
-  footerLeft?: React.ReactNode;
-  footerRight?: React.ReactNode;
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({
+  id,
   imageUrl,
   title,
   description,
   price,
   badge,
-  id,
   ownerEmail,
   ownerPhone,
-}) => (
-  <Link
-    href={`/properties/${id}`}
-    className="flex flex-col w-full md:w-[33%] lg:w-[30%] h:auto md:h-[450px] rounded-lg border-1 hover:scale-[1.02] border-gray-300 dark:border-none bg-white dark:bg-dark relative overflow-hidden transition-scale duration-300 ease-out"
-  >
-    <span className="absolute text-[10px] md:text-xs font-semibold bg-tertiary text-white uppercase top-4 left-4 md:right-4 md:left-auto px-3 py-1.5 rounded-full">
-      {badge}
-    </span>
-    <div className="flex flex-row md:flex-col items-stretch md:items-center h-[180px] md:h-auto">
-      <img
-        src={imageUrl}
-        alt={title}
-        className="w-1/2 h-full md:h-[160px] md:w-full object-cover flex-shrink-0 "
-      />
-      <div className="flex flex-col flex-1 justify-center md:justify-between p-4 h-full w-full gap-1">
-        <div className="text-base md:text-2xl font-semibold text-primary">
-          ${price}
-          <span className="text-sm text-neutral-dark">/Night</span>
-        </div>
-        <p className="text-md md:text-2xl font-semibold text-black dark:text-black mb-1 leading-[1rem] md:leading-normal">
-          {title}
-        </p>
-        <div className="text-xs md:text-sm text-neutral-dark mb-2 line-clamp-2">
-          {description.length > 60 ? `${description.slice(0, 60)}...` : description}
-        </div>
-          <Rating value={4} />
+  rating = 0,
+}) => {
+  return (
+    <Link
+      href={`/properties/${id}`}
+      className="group block w-full max-w-xs mx-auto rounded-xl overflow-hidden shadow-lg bg-white dark:bg-neutral-dark hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700"
+    >
+      <div className="relative h-40 md:h-44 w-full overflow-hidden">
+        <img
+          src={imageUrl}
+          alt={title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        {badge && (
+          <span className="absolute top-3 left-3 bg-tertiary text-white text-xs font-semibold px-3 py-1 rounded-full uppercase">
+            {badge}
+          </span>
+        )}
       </div>
-    </div>
-        <div className="md:border-t border-neutral-200 md:p-2 mt-auto">
-          <OwnerContact email={ownerEmail} phone={ownerPhone} />
+      <div className="p-4 flex flex-col justify-between h-[180px]">
+        <div>
+          <h3 className="text-lg font-bold text-neutral-dark dark:text-white mb-1">
+            {title}
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+            {description.length > 80 ? description.slice(0, 80) + "..." : description}
+          </p>
         </div>
-  </Link>
-);
+        <div className="mt-3 flex flex-col md:flex-row md:items-center md:justify-between">
+          <div>
+            <div>
+              <span className="text-primary font-semibold text-lg md:text-xl">${price}</span>
+              <span className="text-gray-500 dark:text-gray-400 text-sm ml-1">/Night</span>
+            </div>
+          </div>
+          <Rating value={rating} />
+        </div>
+      </div>
+      <div className="border-t border-gray-100 dark:border-gray-700 p-3 bg-gray-50 dark:bg-gray-800 hidden md:block">
+        <OwnerContact email={ownerEmail} phone={ownerPhone} />
+      </div>
+    </Link>
+  );
+};
 
 export default PropertyCard;

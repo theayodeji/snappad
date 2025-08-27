@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import DashboardGreeting from "../_components/DashboardGreeting";
 import { ArrowUpRight } from "lucide-react";
+import UpcomingBooking from "../_components/UpcomingBooking";
 
 type Listing = {
   id: string;
@@ -40,52 +41,17 @@ const dummyListings: Listing[] = [
 ];
 
 const HostDashboard: React.FC = () => {
+  
+  useEffect(() => {
+    console.log("Dashboard was rerendered");
+  }, []);
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 dark:bg-black bg-neutral-100">
       <DashboardGreeting />
 
       {/* Properties Stats */}
-      <div className="">
-        {/* Booking Info */}
-        {false ? (
-          <div className="flex justify-between items-center p-6 dark:bg-neutral-800 bg-neutral-100 rounded-lg shadow">
-            <div className=" flex flex-col gap-2 mb-4 ">
-              <div className="text-xl">
-                <span className="font-semibold">Next Booking:</span>
-                <span className="ml-2">
-                  {dummyListings.find((l) => l.isOccupied)?.title || "N/A"}
-                </span>
-                <span className="">, 12 August 2025</span>
-              </div>
-              <div className="text-lg">
-                <span className="font-semibold">Guest Name:</span>
-                <span className="ml-2">
-                  {dummyListings.find((l) => l.isOccupied)?.occupantName ||
-                    "N/A"}
-                </span>
-              </div>
-              <a href="#contact-user" className="text-primary hover:underline">
-                Contact Guest <ArrowUpRight size={16} className="inline" />
-              </a>
-            </div>
-            <img src="/occupied.png" alt="occupied" className="w-72" />
-          </div>
-        ) : (
-          <div className="p-8 py-10 dark:bg-neutral-800 bg-neutral-100 rounded-lg shadow flex justify-between items-center gap-2 mb-4">
-            <div className="">
-              <div className="text-3xl font-semibold">
-                No upcoming bookings.
-              </div>
-              <a href="#view-history" className="text-primary text-lg hover:underline">
-                View Performance/History
-                <ArrowUpRight size={16} className="inline" />
-              </a>
-            </div>
-            <img src="/vacant.png" alt="vacant" className="w-72" />
-          </div>
-        )}
-      </div>
+      <UpcomingBooking />
 
       {/* Recent Listings */}
       <div>

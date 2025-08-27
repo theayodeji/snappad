@@ -9,7 +9,7 @@ import { FaBed, FaTimesCircle } from "react-icons/fa";
 import { MdDateRange, MdLocationOn } from "react-icons/md";
 // Import useAuth hook
 import { useAuth } from "@/contexts/AuthContext";
-import { useBooking } from "@/hooks/useBooking";
+import { useBooking } from "@/hooks/useGuestBooking";
 
 // Assuming these are separate components you've created
 import PropertyInfo from "./PropertyInfo";

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Bed, Calendar, Clock, User as UserIcon } from 'lucide-react'; // Renamed User to UserIcon to avoid conflict
 import { format, differenceInDays } from 'date-fns';
 import SnappadLoader from '@/components/SnappadLoader';
-import { useBooking } from '@/hooks/useBooking'; // Import useBooking hook
+import { useBooking } from '@/hooks/useGuestBooking'; // Import useBooking hook
 import { useAuth } from '@/contexts/AuthContext'; // Import useAuth hook
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';

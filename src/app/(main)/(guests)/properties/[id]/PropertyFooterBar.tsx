@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { X } from "lucide-react";
 import MobileBookingModal from "./MobileBookingModal";
-import { useBooking } from "@/hooks/useBooking"; // Assuming this hook exists
+import { useBooking } from "@/hooks/useGuestBooking"; // Assuming this hook exists
 import { useBookingCalculation } from "@/hooks/useBookingCalculation"; // Assuming this hook exists
 import { toast } from "react-hot-toast"; // For user feedback
 

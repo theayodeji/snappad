@@ -3,7 +3,7 @@ import { Sora } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "@/contexts/AuthContext";
-
+import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
 // const sora = Sora({
 //   variable: "--font-sora",
 //   subsets: ["latin"],
@@ -25,7 +25,9 @@ export default function RootLayout({
         <body
           className={` font-sans antialiased dark:bg-black dark:text-white bg-white text-black`}
         >
-          {children}
+          <ReactQueryProvider>
+            {children}
+          </ReactQueryProvider>
           <Toaster position="top-center" reverseOrder={false} />
         </body>
       </AuthProvider>

@@ -6,7 +6,7 @@ import { DateRange } from "react-day-picker";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation"; // Don't forget to import useRouter!
 
-import { useBooking } from "@/hooks/useBooking";
+import { useBooking } from "@/hooks/useGuestBooking";
 import type { BookingCreateInput } from '@/types/booking';
 
 // Assuming GuestDropdown and DateInput are correctly defined and imported

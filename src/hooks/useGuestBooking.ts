@@ -1,33 +1,11 @@
 // src/hooks/useBooking.ts
-
 import { useState, useCallback, useMemo } from "react";
-import axios from "axios";
+import axios from "@/lib/api";
 import { DateRange } from "react-day-picker";
 import { parseAxiosError } from "@/lib/parseAxiosError";
 import toast from "react-hot-toast";
 import type { UseBookingResult, BookingCreateInput, BookingDetails } from "@/types/booking";
-import { useAuth } from "@/contexts/AuthContext"; // Import useAuth
-
-// Assuming these interfaces are defined elsewhere or inline if simple
-interface PropertyDetailsForBooking {
-  _id: string;
-  title: string;
-  location: { city: string; country: string; [key: string]: any }; // Simplified for example
-  imageUrls: string[];
-  price: number;
-}
-
-// interface FetchedBooking {
-//   _id: string;
-//   property: PropertyDetailsForBooking;
-//   checkInDate: string;
-//   checkOutDate: string;
-//   numberOfGuests: number;
-//   totalPrice: number;
-//   status: string; // e.g., 'pending', 'confirmed', 'cancelled'
-//   paymentStatus: string; // e.g., 'pending', 'paid'
-//   createdAt: string;
-// }
+import { useAuth } from "@/contexts/AuthContext";
 
 export function useBooking(): UseBookingResult {
   const { user, isAuthenticated, loading: authLoading } = useAuth(); // Get user and auth status
@@ -68,7 +46,7 @@ export function useBooking(): UseBookingResult {
 
       try {
         const response = await axios.get(
-          `/api/properties/${propertyId}/availability`,
+          `/properties/${propertyId}/availability`,
           {
             params: {
               checkInDate: dates.from.toISOString(),
@@ -119,7 +97,7 @@ export function useBooking(): UseBookingResult {
       }
 
       try {
-        const response = await axios.post("/api/bookings", {
+        const response = await axios.post("/bookings", {
           propertyId: bookingDetails.propertyId,
           checkInDate: bookingDetails.checkInDate.toISOString(),
           checkOutDate: bookingDetails.checkOutDate.toISOString(),
@@ -133,7 +111,7 @@ export function useBooking(): UseBookingResult {
             error: null,
             success: true,
             data: response.data.data,
-          }); // Store successful data
+          });
           toast.success("Booking created successfully!");
           return response.data;
         } else {
@@ -161,7 +139,7 @@ export function useBooking(): UseBookingResult {
       }
     },
     [isAuthenticated, user?.id]
-  ); // Add isAuthenticated and user.id to dependencies
+  );
 
   const cancelBooking = useCallback(
     async (bookingId: string) => {
@@ -170,7 +148,7 @@ export function useBooking(): UseBookingResult {
         error: null,
         success: false,
         bookingId,
-      }); // Store bookingId being cancelled
+      });
 
       if (!isAuthenticated || !user?.id) {
         const errorMessage = "You must be logged in to cancel a booking.";
@@ -185,9 +163,8 @@ export function useBooking(): UseBookingResult {
       }
 
       try {
-        const response = await axios.delete(`/api/bookings/${bookingId}`);
+        const response = await axios.delete(`/bookings/${bookingId}`);
         if (response.data.success || response.status === 204) {
-          // Check for 204 No Content too
           setCancellation({
             loading: false,
             error: null,
@@ -217,15 +194,13 @@ export function useBooking(): UseBookingResult {
       }
     },
     [isAuthenticated, user?.id]
-  ); // Add isAuthenticated and user.id to dependencies
+  );
 
-  // NEW FUNCTION: fetchUserBookings to get all bookings for the authenticated user
   const fetchUserBookings = useCallback(async (): Promise<{
     data: BookingDetails[];
     error: string | null;
   }> => {
     if (!isAuthenticated || !user?.id || authLoading) {
-      // Return empty array instead of null
       return {
         data: [],
         error: "Authentication required to fetch bookings.",
@@ -233,7 +208,7 @@ export function useBooking(): UseBookingResult {
     }
 
     try {
-      const response = await axios.get("/api/bookings"); // Calls GET /api/bookings
+      const response = await axios.get("/bookings");
       if (response.data.success) {
         return { data: response.data.data as BookingDetails[], error: null };
       } else {
@@ -248,7 +223,7 @@ export function useBooking(): UseBookingResult {
       }
       return { data: [], error: parseAxiosError(err) };
     }
-  }, [isAuthenticated, user?.id, authLoading]); // Add isAuthenticated, user.id, authLoading to dependencies
+  }, [isAuthenticated, user?.id, authLoading]);
 
   const fetchBookingDetails = useCallback(
     async (bookingId: string): Promise<{ data: any; error: string | null }> => {
@@ -259,7 +234,7 @@ export function useBooking(): UseBookingResult {
         };
       }
       try {
-        const response = await axios.get(`/api/bookings/${bookingId}`);
+        const response = await axios.get(`/bookings/${bookingId}`);
         if (response.data.success) {
           return { data: response.data.data, error: null };
         } else {
@@ -281,7 +256,7 @@ export function useBooking(): UseBookingResult {
   const resetBookingState = useCallback(() => {
     setIsAvailable(null);
     setAvailability({ loading: false, error: null });
-    setBooking({ loading: false, error: null, success: false, data: null }); // Reset data too
+    setBooking({ loading: false, error: null, success: false, data: null });
     setCancellation({
       loading: false,
       error: null,
@@ -293,7 +268,7 @@ export function useBooking(): UseBookingResult {
   return useMemo(
     () => ({
       isAvailable,
-      setIsAvailable, // Keep if needed for external control, otherwise remove
+      setIsAvailable,
       checkAvailability,
       submitBooking,
       cancelBooking,
@@ -302,7 +277,7 @@ export function useBooking(): UseBookingResult {
       booking,
       cancellation,
       fetchBookingDetails,
-      fetchUserBookings, // Expose the new function
+      fetchUserBookings,
     }),
     [
       isAvailable,

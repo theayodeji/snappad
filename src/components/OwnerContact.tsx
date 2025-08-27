@@ -11,7 +11,7 @@ const OwnerContact: React.FC<OwnerContactProps> = ({ email, phone }) => (
       <span role="img" aria-label="avatar">👤</span>
     </div>
     <div className="flex flex-col text-xs">
-      <span className="font-semibold text-black">{email}</span>
+      <span className="font-semibold text-black dark:text-white">{email}</span>
       {phone && <span className="text-gray-300 text-xs">{phone}</span>}
     </div>
   </div>

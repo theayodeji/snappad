@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
-import { useBooking } from "./useBooking";
+import { useBooking } from "./useGuestBooking";
 
 
 interface UseBookingCalculationOptions {
