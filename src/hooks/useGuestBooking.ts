@@ -103,6 +103,7 @@ export function useBooking(): UseBookingResult {
           checkOutDate: bookingDetails.checkOutDate.toISOString(),
           numberOfGuests: bookingDetails.numberOfGuests,
           guestMessage: bookingDetails.guestMessage,
+          guestId: user.id,
         });
 
         if (response.data.success) {

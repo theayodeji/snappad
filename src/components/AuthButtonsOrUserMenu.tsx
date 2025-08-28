@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { User, LogOut, Bookmark, Home as HomeIcon, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { Skeleton } from './ui/skeleton';
 
 
 //eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -11,11 +12,15 @@ interface AuthButtonsOrUserMenuProps {
 }
 
 const AuthButtonsOrUserMenu: React.FC<AuthButtonsOrUserMenuProps> = () => {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, loading: authLoading } = useAuth();
 
   const handleLogout = () => {
     logout();
   };
+
+  if (authLoading) {
+    return <div className="hidden md:flex items-center space-x-4"><Skeleton className="h-8 w-32 rounded-2xl" /></div>;
+  }
 
   return (
     <div className="hidden md:flex items-center space-x-4">

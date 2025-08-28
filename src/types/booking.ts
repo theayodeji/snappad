@@ -33,13 +33,13 @@ import { Property } from './property';
 export interface BookingDetails {
   _id: string;
   property: Property;
+  hostId: string;
+  guestId: string;
   checkInDate: string;
   checkOutDate: string;
   numberOfGuests: number;
   totalPrice: number;
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
-  paymentStatus: 'pending' | 'paid' | 'refunded';
-  guestMessage?: string;
   createdAt: string;
 }
 

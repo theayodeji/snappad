@@ -1,32 +1,28 @@
 // models/Booking.ts
 
-import mongoose, { Document, Schema } from 'mongoose';
-import Property from './Property'; // Import the Property model
+import mongoose, { Document, Schema } from "mongoose";
+import Property from "./Property"; // Import the Property model
 
 export interface IBooking extends Document {
   property: mongoose.Types.ObjectId;
-  guestId: mongoose.Types.ObjectId; // Optional field for guest ID
+  guestId: mongoose.Types.ObjectId;
   checkInDate: Date;
   checkOutDate: Date;
   numberOfGuests: number;
   totalPrice: number;
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'declined';
-  paymentStatus: 'pending' | 'paid' | 'refunded' | 'failed';
-  paymentIntentId?: string;
-  ownerMessage?: string;
-  guestMessage?: string;
+  status: "pending" | "confirmed" | "cancelled" | "completed" | "expired";
 }
 
 const BookingSchema: Schema<IBooking> = new mongoose.Schema<IBooking>(
   {
     property: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Property',
+      ref: "Property",
       required: true,
     },
     guestId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', // Assuming you have a User model
+      ref: "User", // Assuming you have a User model
       required: true, // Optional field for guest ID
     },
     checkInDate: {
@@ -40,14 +36,14 @@ const BookingSchema: Schema<IBooking> = new mongoose.Schema<IBooking>(
         validator: function (this: IBooking, value: Date) {
           return value > this.checkInDate;
         },
-        message: 'Check-out date must be after check-in date.',
+        message: "Check-out date must be after check-in date.",
       },
     },
     numberOfGuests: {
       type: Number,
       required: true,
-      min: [1, 'At least one guest is required.'],
-      max: [5, 'Maximum of 5 guests allowed.'],
+      min: [1, "At least one guest is required."],
+      max: [5, "Maximum of 5 guests allowed."],
       default: 1,
     },
     totalPrice: {
@@ -57,17 +53,16 @@ const BookingSchema: Schema<IBooking> = new mongoose.Schema<IBooking>(
     },
     status: {
       type: String,
-      enum: ['pending', 'confirmed', 'cancelled', 'completed', 'declined'],
-      default: 'pending',
+      enum: [
+        "pending",
+        "confirmed",
+        "cancelled",
+        "completed",
+        "declined",
+        "expired",
+      ],
+      default: "pending",
     },
-    paymentStatus: {
-      type: String,
-      enum: ['pending', 'paid', 'refunded', 'failed'],
-      default: 'pending',
-    },
-    paymentIntentId: String,
-    ownerMessage: String,
-    guestMessage: String,
   },
   { timestamps: true }
 );
@@ -77,7 +72,7 @@ BookingSchema.index({ property: 1, checkInDate: 1, checkOutDate: 1 });
 /**
  * Pre-save middleware to auto-calculate total price.
  */
-BookingSchema.pre('validate', async function (next) {
+BookingSchema.pre("validate", async function (next) {
   const booking = this as IBooking;
 
   if (!booking.checkInDate || !booking.checkOutDate || !booking.property) {
@@ -86,7 +81,7 @@ BookingSchema.pre('validate', async function (next) {
 
   const property = await Property.findById(booking.property);
   if (!property) {
-    return next(new Error('Property not found'));
+    return next(new Error("Property not found"));
   }
 
   const nights =
@@ -98,4 +93,5 @@ BookingSchema.pre('validate', async function (next) {
   next();
 });
 
-export default mongoose.models.Booking || mongoose.model<IBooking>('Booking', BookingSchema);
+export default mongoose.models.Booking ||
+  mongoose.model<IBooking>("Booking", BookingSchema);

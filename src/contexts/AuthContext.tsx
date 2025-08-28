@@ -136,7 +136,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
         setToken(storedToken); // Set token immediately for Axios interceptor
         try {
-          console.log('Calling /api/auth/me with token:', storedToken ? 'Token exists' : 'No token');
           const response = await axios.get("/api/auth/me", {
             headers: {
               Authorization: `Bearer ${storedToken}`,
@@ -176,7 +175,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     loadUserFromToken();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     const requestInterceptor = axios.interceptors.request.use(

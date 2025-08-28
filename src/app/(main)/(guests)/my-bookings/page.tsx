@@ -1,17 +1,17 @@
-// src/app/bookings/page.tsx
+
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Bed, Calendar, Clock, User as UserIcon } from 'lucide-react'; // Renamed User to UserIcon to avoid conflict
+import { Bed, Calendar, Clock, User as UserIcon } from 'lucide-react'; 
 import { format, differenceInDays } from 'date-fns';
 import SnappadLoader from '@/components/SnappadLoader';
-import { useBooking } from '@/hooks/useGuestBooking'; // Import useBooking hook
-import { useAuth } from '@/contexts/AuthContext'; // Import useAuth hook
+import { useBooking } from '@/hooks/useGuestBooking'; 
+import { useAuth } from '@/contexts/AuthContext'; 
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import { MdLocationOn } from 'react-icons/md'; // Import MdLocationOn
+import { MdLocationOn } from 'react-icons/md';
 
-// Define Location interface (assuming it's consistent across your models)
+
 interface Location {
   address: string;
   city: string;
@@ -20,7 +20,7 @@ interface Location {
   zipCode?: string;
 }
 
-// Define PropertyDetails interface (as expected from populated booking)
+
 interface PropertyDetails {
   _id: string;
   title: string;
@@ -29,7 +29,7 @@ interface PropertyDetails {
   price: number;
 }
 
-// Define BookingDetails interface (as returned by /api/bookings GET)
+
 interface BookingDetails {
   _id: string;
   property: PropertyDetails;
@@ -38,7 +38,6 @@ interface BookingDetails {
   numberOfGuests: number;
   totalPrice: number;
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed'; // Add more statuses as needed
-  paymentStatus: 'pending' | 'paid' | 'refunded'; 
   createdAt: string;
 }
 
@@ -56,7 +55,7 @@ const MyBookingsPage = () => {
   const [loadingBookings, setLoadingBookings] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Effect to fetch bookings when component mounts or auth state changes
+ 
   useEffect(() => {
     if (authLoading) {
       return;
@@ -71,7 +70,7 @@ const MyBookingsPage = () => {
       setLoadingBookings(true);
       setError(null);
       try {
-        const { data, error: fetchError } = await fetchUserBookings(); // Call the actual fetch function
+        const { data, error: fetchError } = await fetchUserBookings(); 
         if (fetchError) {
           setError(fetchError);
           toast.error(`Failed to load bookings: ${fetchError}`);
@@ -88,7 +87,7 @@ const MyBookingsPage = () => {
     };
 
     loadBookings();
-  }, [isAuthenticated, authLoading, router, fetchUserBookings]); // Dependencies include auth states and fetch function
+  }, [isAuthenticated, authLoading, router, fetchUserBookings]); 
 
   // Effect to handle cancellation success/error
   useEffect(() => {
@@ -97,7 +96,7 @@ const MyBookingsPage = () => {
       setBookings(prev =>
         prev.map(booking =>
           booking._id === cancellation.bookingId
-            ? { ...booking, status: 'cancelled', paymentStatus: 'refunded' }
+            ? { ...booking, status: 'cancelled' }
             : booking
         )
       );

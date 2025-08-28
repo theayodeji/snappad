@@ -45,7 +45,7 @@ export default function Home() {
       <main className="flex flex-col row-start-2 items-center sm:items-start w-full max-w-6xl">
         <Hero />
         <FeaturesSection />
-        <div className="w-[90%] max-w-6xl mx-auto">
+        <div className="w-[90%] max-w-6xl mx-auto" id="listings">
           <h2 className="text-2xl font-bold text-black dark:text-white mb-6">
             Explore New Properties
           </h2>
