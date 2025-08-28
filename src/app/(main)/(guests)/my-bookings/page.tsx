@@ -165,7 +165,6 @@ const MyBookingsPage = () => {
 
           return (
             <div key={bookingItem._id} className="flex flex-col md:flex-row bg-white dark:bg-neutral-dark rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-              {/* Property Image */}
               <div className="w-full md:w-1/3 h-48 md:h-auto overflow-hidden">
                 <img
                   className='w-full h-full object-cover'
@@ -174,7 +173,6 @@ const MyBookingsPage = () => {
                 />
               </div>
 
-              {/* Booking Details */}
               <div className="w-full md:w-2/3 p-4 flex flex-col justify-between">
                 <div>
                   <h3 className='text-xl font-semibold text-neutral-900 dark:text-white mb-2'>{bookingItem.property.title}</h3>
@@ -207,7 +205,6 @@ const MyBookingsPage = () => {
                   </div>
                 </div>
 
-                {/* Price and Status */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-t border-gray-200 dark:border-gray-600 pt-3 mt-3">
                   <p className='text-lg font-bold text-primary-600 dark:text-primary-400'>
                     Total: ${bookingItem.totalPrice.toFixed(2)}
@@ -220,7 +217,6 @@ const MyBookingsPage = () => {
                   </div>
                 </div>
 
-                {/* Actions */}
                 <div className="flex flex-col sm:flex-row gap-3 mt-4">
                   <button
                     onClick={() => handleViewDetails(bookingItem._id)}

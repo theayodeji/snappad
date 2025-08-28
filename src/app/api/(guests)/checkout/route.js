@@ -51,6 +51,7 @@ export async function POST(req) {
 
     if (!response.status) {
       throw new Error("Failed to initialize payment");
+      console.log(response);
     }
 
     const existingPayment = await Payment.findOne({bookingId});
